@@ -11,7 +11,6 @@ import { useBlog } from "@/provider/BlogProvider";
 const Index = () => {
   const { articles, addArticleAsync, refetchGetAllArticles } = useBlog();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const queryClient = new QueryClient();
 
   async function handleAddArticle(title: string, summary: string, imageUrl: string) {
     const newArticle: ArticleModel = {

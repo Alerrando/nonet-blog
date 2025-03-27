@@ -1,3 +1,4 @@
+
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
@@ -47,7 +48,7 @@ export function useBlog() {
       return response;
     },
     staleTime: Infinity,
-    cacheTime: 1000 * 60 * 60 * 24,
+    gcTime: 1000 * 60 * 60 * 24, // Replace cacheTime with gcTime
   });
 
   const { mutateAsync: addArticleAsync, isPending: isPendingAddArticle } = useMutation({
