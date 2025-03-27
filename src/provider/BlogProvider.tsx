@@ -1,9 +1,11 @@
+
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
 import { addItem, getAllItems } from "../services/indexedDB";
 import { initialBlogState } from "@/lib/utils";
+import { ArticleModel } from "@/models/ArticleModel";
 
 interface BlogStoreProps {
   articles: ArticleModel[];
@@ -47,7 +49,7 @@ export function useBlog() {
       return response;
     },
     staleTime: Infinity,
-    cacheTime: 1000 * 60 * 60 * 24,
+    gcTime: 1000 * 60 * 60 * 24, // Replace cacheTime with gcTime
   });
 
   const { mutateAsync: addArticleAsync, isPending: isPendingAddArticle } = useMutation({

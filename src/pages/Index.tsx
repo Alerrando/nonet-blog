@@ -1,17 +1,14 @@
-
 import AddArticleButton from '@/components/AddArticleButton';
 import AddArticleModal from '@/components/AddArticleModal';
 import ArticleCard from '@/components/ArticleCard';
 import { ArticleModel } from '@/models/ArticleModel';
 import { useBlog } from '@/provider/BlogProvider';
-import { QueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
 const Index = () => {
   const { articles, addArticleAsync, refetchGetAllArticles } = useBlog();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const queryClient = new QueryClient();
 
   async function handleAddArticle(title: string, summary: string, imageUrl: string) {
     const newArticle: ArticleModel = {
