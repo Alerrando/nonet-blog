@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { cn } from '@/lib/utils';
+import { Link } from 'react-router-dom';
 
 interface ArticleCardProps {
   title: string;
@@ -30,18 +31,20 @@ const ArticleCard = ({ title, summary, image, className }: ArticleCardProps) => 
         <p className="text-muted-foreground text-sm line-clamp-3">{summary}</p>
         
         <div className="mt-4">
-          <button className="text-primary font-medium text-sm inline-flex items-center group">
-            Read More
-            <svg 
-              className="ml-1 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" 
-              xmlns="http://www.w3.org/2000/svg" 
-              fill="none" 
-              viewBox="0 0 24 24" 
-              stroke="currentColor"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-            </svg>
-          </button>
+          <Link to={`/article/${title}`}>
+            <button className="text-primary font-medium text-sm inline-flex items-center group">
+              Read More
+              <svg 
+                className="ml-1 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" 
+                xmlns="http://www.w3.org/2000/svg" 
+                fill="none" 
+                viewBox="0 0 24 24" 
+                stroke="currentColor"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+              </svg>
+            </button>
+          </Link>
         </div>
       </div>
     </div>
