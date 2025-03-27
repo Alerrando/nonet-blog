@@ -45,7 +45,6 @@ const Index = () => {
                 summary={article.summary}
                 image={article.image}
                 className={`content-animation`}
-                style={{ animationDelay: `${index * 0.1}s` }}
               />
             ))}
           </div>
