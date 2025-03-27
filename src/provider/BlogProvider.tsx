@@ -3,13 +3,13 @@ import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
 import { addItem, getAllItems } from "../services/indexedDB";
-import { initialBlogState } from "@/lib/utils";
 
 interface BlogStoreProps {
   articles: ArticleModel[];
   currentArticle: ArticleModel | null;
   setArticles: (data: ArticleModel[]) => void;
   setCurrentArticle: (data: ArticleModel | null) => void;
+  getArticleByName: (name: string) => ArticleModel | undefined;
 }
 
 export const useBlogStore = create<BlogStoreProps>()(
@@ -19,6 +19,7 @@ export const useBlogStore = create<BlogStoreProps>()(
       currentArticle: null,
       setArticles: (data) => set({ articles: data }),
       setCurrentArticle: (data) => set({ currentArticle: data }),
+      getArticleByName: (name: string) => get().articles.find((article) => article.title === name),
     }),
     {
       name: "blog-storage",
@@ -27,19 +28,18 @@ export const useBlogStore = create<BlogStoreProps>()(
         articles: state.articles,
         currentArticle: state.currentArticle,
       }),
-    }
-  )
+    },
+  ),
 );
 
 export function useBlog() {
-  const {
-    articles,
-    setArticles,
-    currentArticle,
-    setCurrentArticle,
-  } = useBlogStore();
+  const { articles, setArticles, currentArticle, setCurrentArticle, getArticleByName } = useBlogStore();
 
-  const { isLoading: isLoadingGetAllArticles, error: errorGetAllArticles, refetch: refetchGetAllArticles } = useQuery({
+  const {
+    isLoading: isLoadingGetAllArticles,
+    error: errorGetAllArticles,
+    refetch: refetchGetAllArticles,
+  } = useQuery({
     queryKey: ["get-all-articles"],
     queryFn: async () => {
       const response = await getAllItems();
@@ -57,7 +57,7 @@ export function useBlog() {
     },
     onSuccess: () => {},
     onError: () => {},
-  })
+  });
 
   return {
     articles,
@@ -68,5 +68,6 @@ export function useBlog() {
     errorGetAllArticles,
     currentArticle,
     setCurrentArticle,
+    getArticleByName,
   };
 }
