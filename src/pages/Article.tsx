@@ -43,6 +43,10 @@ export function Article() {
         </Link>
       </div>
 
+      <div className="w-full h-[300px] md:h-[400px] rounded-lg overflow-hidden mb-8">
+        <img src={currentArticle.image} alt={currentArticle.title} className="w-full h-full object-cover" />
+      </div>
+
       <div className="mb-8">
         <h1 className="text-3xl md:text-4xl lg:text-5xl font-medium mb-4">{currentArticle.title}</h1>
         <div className="flex items-center text-muted-foreground">
@@ -55,10 +59,6 @@ export function Article() {
             <span className="text-sm">5 min read</span>
           </div>
         </div>
-      </div>
-
-      <div className="w-full h-[300px] md:h-[400px] rounded-lg overflow-hidden mb-8">
-        <img src={currentArticle.image} alt={currentArticle.title} className="w-full h-full object-cover" />
       </div>
 
       <Editor isNewContent={false} saveAnnotation={() => {}} />

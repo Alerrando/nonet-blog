@@ -1,22 +1,25 @@
+import "highlight.js/styles/panda-syntax-dark.css";
+import "./Editor.css";
+
 import * as Popover from "@radix-ui/react-popover";
 import * as ToggleGroup from "@radix-ui/react-toggle-group";
+import BulletList from "@tiptap/extension-bullet-list";
 import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
+import Heading from "@tiptap/extension-heading";
+import Paragraph from "@tiptap/extension-paragraph";
 import { BubbleMenu, EditorContent, FloatingMenu, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import js from "highlight.js/lib/languages/javascript";
 import html from "highlight.js/lib/languages/xml";
-import "highlight.js/styles/panda-syntax-dark.css";
-import { createLowlight, all } from 'lowlight'
-import { useEffect, useState } from "react";
+import { all, createLowlight } from "lowlight";
 import { LuSettings2 } from "react-icons/lu";
 import { RxChatBubble, RxChevronDown, RxCode, RxFontBold, RxFontItalic, RxStrikethrough } from "react-icons/rx";
-import { useParams } from "react-router-dom";
 import { twMerge } from "tailwind-merge";
-import "./Editor.css";
-import { ModalInfoPopover } from "../ModalInfoPopover";
-import { FloatingMenuShow } from "../FloatingMenuShow";
 
-const lowlight = createLowlight(all)
+import { FloatingMenuShow } from "../FloatingMenuShow";
+import { ModalInfoPopover } from "../ModalInfoPopover";
+
+const lowlight = createLowlight(all);
 
 lowlight.register("html", html);
 lowlight.register("js", js);
@@ -35,6 +38,11 @@ export function Editor({ isNewContent, saveAnnotation }: EditorProps) {
       CodeBlockLowlight.configure({
         lowlight,
       }),
+      Heading.configure({
+        levels: [1, 2, 3],
+      }),
+      Paragraph,
+      BulletList,
     ],
     content: "",
     editorProps: {
@@ -49,10 +57,10 @@ export function Editor({ isNewContent, saveAnnotation }: EditorProps) {
       <EditorContent
         editor={editor}
         className={twMerge(
-          `w-full md:w-auto md:max-w-[65%] h-auto flex flex-col-reverse mx-auto  pt-8 md:pt-12 prose prose-invert relative editor`,
+          `w-full h-auto flex flex-col-reverse mx-auto prose prose-invert relative editor`,
           `${
             editor?.getText().length === 0
-              ? "after:w-auto after:h-min after:content-['Sem_Titulo'] after:block after:text-zinc-600 after:text-4xl after:absolute after:bottom-[40%] after:z-0"
+              ? "after:w-auto after:h-min after:content-['Sem_Titulo'] after:block after:text-zinc-600 after:text-4xl after:absolute after:-top-2 after:z-0"
               : ""
           }
           ${isNewContent && "md: md:max-w-[92%] m-[0_auto!important]"}
@@ -92,10 +100,7 @@ export function Editor({ isNewContent, saveAnnotation }: EditorProps) {
 
             <Popover.Portal>
               <Popover.Content className="h-2/4 bg-zinc-700 md:bg-zinc-50 md:dark:bg-zinc-700/5 py-1 px-1 gap-1 shadow-xl border border-zinc-600 md:border-zinc-200 md:dark:border-zinc-700/md:dark:bg-zinc-700/5 shadow-black/20 rounded-lg overflow-hidden flex flex-col overflow-y-auto z-[65]">
-                <div
-                  className="group flex relative"
-                  onClick={() => editor.chain().focus().setHeading({ level: 1 }).run()}
-                >
+                <div className="group flex relative" onClick={() => editor.chain().focus().setParagraph().run()}>
                   <FloatingMenuShow.Root>
                     <FloatingMenuShow.Img
                       src="https://www.notion.so/images/blocks/text/en-US.png"
@@ -107,14 +112,16 @@ export function Editor({ isNewContent, saveAnnotation }: EditorProps) {
                       texts={[{ text: "Text" }, { text: "Just start writing with plain text." }]}
                     />
                   </FloatingMenuShow.Root>
+
+                  <ModalInfoPopover
+                    src="https://www.notion.so/images/tooltips/blocks/text/en-US.png"
+                    alt="Text"
+                    spanText="Just start writing with plain text"
+                    classNamePopover="-top-6"
+                  />
                 </div>
 
-                <div
-                  className="group"
-                  onClick={() => {
-                    editor.chain().focus().toggleHeading({ level: 1 }).run();
-                  }}
-                >
+                <div className="group" onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}>
                   <FloatingMenuShow.Root>
                     <FloatingMenuShow.Img
                       src="https://www.notion.so/images/blocks/header.57a7576a.png"
@@ -148,6 +155,13 @@ export function Editor({ isNewContent, saveAnnotation }: EditorProps) {
 
                     <FloatingMenuShow.TextInput texts={[{ text: "Heading 2" }, { text: "Medium section heading." }]} />
                   </FloatingMenuShow.Root>
+
+                  <ModalInfoPopover
+                    src="https://www.notion.so/images/tooltips/blocks/sub-header/en-US.png"
+                    alt="Heading 2"
+                    spanText="Medium section heading."
+                    classNamePopover="top-16"
+                  />
                 </div>
 
                 <div
@@ -184,6 +198,13 @@ export function Editor({ isNewContent, saveAnnotation }: EditorProps) {
 
                     <FloatingMenuShow.TextInput texts={[{ text: "List Bullet" }, { text: "List bullet create." }]} />
                   </FloatingMenuShow.Root>
+
+                  <ModalInfoPopover
+                    src="https://www.notion.so/images/tooltips/blocks/bulleted-list/en-US.png"
+                    alt="List Bullet"
+                    spanText="List bullet create."
+                    classNamePopover="top-52"
+                  />
                 </div>
 
                 <div className="group" onClick={() => editor.chain().focus().toggleOrderedList().run()}>
@@ -196,6 +217,13 @@ export function Editor({ isNewContent, saveAnnotation }: EditorProps) {
 
                     <FloatingMenuShow.TextInput texts={[{ text: "Ordered List" }, { text: "Ordered List create." }]} />
                   </FloatingMenuShow.Root>
+
+                  <ModalInfoPopover
+                    src="https://www.notion.so/images/tooltips/blocks/numbered-list/en-US.png"
+                    alt="Ordered Bullet"
+                    spanText="Ordered bullet create."
+                    classNamePopover="top-64"
+                  />
                 </div>
               </Popover.Content>
             </Popover.Portal>
