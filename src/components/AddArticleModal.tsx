@@ -1,5 +1,6 @@
 import { Link, Upload, X } from "lucide-react";
 import React, { useState } from "react";
+import { Controller, useForm } from "react-hook-form";
 
 interface AddArticleModalProps {
   isOpen: boolean;
@@ -7,12 +8,10 @@ interface AddArticleModalProps {
   onAddArticle: (title: string, summary: string, imageUrl: string) => void;
 }
 
-const AddArticleModal = ({ isOpen, onClose, onAddArticle }: AddArticleModalProps) => {
-  const [title, setTitle] = useState("");
-  const [summary, setSummary] = useState("");
-  const [imageUrl, setImageUrl] = useState("");
-  const [preview, setPreview] = useState<string | null>(null);
+export function AddArticleModal({ isOpen, onClose, onAddArticle }: AddArticleModalProps) {
+  const { control, handleSubmit, setValue, watch } = useForm();
   const [imageInputType, setImageInputType] = useState<"upload" | "url">("upload");
+  const preview = watch("imageUrl");
 
   if (!isOpen) return null;
 
@@ -21,32 +20,24 @@ const AddArticleModal = ({ isOpen, onClose, onAddArticle }: AddArticleModalProps
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setImageUrl(reader.result as string);
-        setPreview(reader.result as string);
+        setValue("imageUrl", reader.result as string);
       };
       reader.readAsDataURL(file);
     }
   };
 
   const handleUrlChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const url = e.target.value;
-    setImageUrl(url);
-    if (url) {
-      setPreview(url);
-    }
+    setValue("imageUrl", e.target.value);
   };
 
-  const handleSubmit = () => {
-    if (title.trim()) {
+  const onSubmit = (data: any) => {
+    if (data.title.trim()) {
       onAddArticle(
-        title,
-        summary,
-        imageUrl || `https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&fit=crop&w=1200&q=80`,
+        data.title,
+        data.summary,
+        data.imageUrl ||
+          `https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&fit=crop&w=1200&q=80`,
       );
-      setTitle("");
-      setSummary("");
-      setImageUrl("");
-      setPreview(null);
       onClose();
     }
   };
@@ -57,7 +48,6 @@ const AddArticleModal = ({ isOpen, onClose, onAddArticle }: AddArticleModalProps
         className="bg-background rounded-xl shadow-xl w-full max-w-md modal-animation overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Preview header if an image is selected */}
         {preview && (
           <div className="relative h-40 w-full">
             <img src={preview} alt="Preview" className="w-full h-full object-cover" />
@@ -73,18 +63,23 @@ const AddArticleModal = ({ isOpen, onClose, onAddArticle }: AddArticleModalProps
             </button>
           </div>
 
-          <div className="space-y-4">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div>
               <label htmlFor="title" className="block text-sm font-medium mb-1.5">
                 Article Title
               </label>
-              <input
-                id="title"
-                type="text"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                className="w-full px-4 py-2.5 rounded-lg border border-input bg-background"
-                placeholder="Enter article title"
+              <Controller
+                control={control}
+                name="title"
+                render={({ field }) => (
+                  <input
+                    id="title"
+                    type="text"
+                    {...field}
+                    className="w-full px-4 py-2.5 rounded-lg border border-input bg-background"
+                    placeholder="Enter article title"
+                  />
+                )}
               />
             </div>
 
@@ -92,13 +87,18 @@ const AddArticleModal = ({ isOpen, onClose, onAddArticle }: AddArticleModalProps
               <label htmlFor="summary" className="block text-sm font-medium mb-1.5">
                 Article Summary
               </label>
-              <input
-                id="summary"
-                type="text"
-                value={summary}
-                onChange={(e) => setSummary(e.target.value)}
-                className="w-full px-4 py-2.5 rounded-lg border border-input bg-background"
-                placeholder="Enter article summary"
+              <Controller
+                control={control}
+                name="summary"
+                render={({ field }) => (
+                  <input
+                    id="summary"
+                    type="text"
+                    {...field}
+                    className="w-full px-4 py-2.5 rounded-lg border border-input bg-background"
+                    placeholder="Enter article summary"
+                  />
+                )}
               />
             </div>
 
@@ -149,38 +149,43 @@ const AddArticleModal = ({ isOpen, onClose, onAddArticle }: AddArticleModalProps
                 </div>
               ) : (
                 <div>
-                  <input
-                    type="url"
-                    value={imageUrl}
-                    onChange={handleUrlChange}
-                    className="w-full px-4 py-2.5 rounded-lg border border-input bg-background"
-                    placeholder="Enter image URL"
+                  <Controller
+                    control={control}
+                    name="imageUrl"
+                    render={({ field }) => (
+                      <input
+                        type="url"
+                        {...field}
+                        onChange={(e) => handleUrlChange(e)}
+                        className="w-full px-4 py-2.5 rounded-lg border border-input bg-background"
+                        placeholder="Enter image URL"
+                      />
+                    )}
                   />
                   <p className="text-xs text-muted-foreground mt-1">Example: https://example.com/image.jpg</p>
                 </div>
               )}
             </div>
-          </div>
 
-          <div className="mt-8 flex justify-end space-x-3">
-            <button
-              onClick={onClose}
-              className="px-4 py-2 rounded-lg text-muted-foreground hover:text-foreground transition-colors"
-            >
-              Cancel
-            </button>
-            <button
-              onClick={handleSubmit}
-              className="px-4 py-2 rounded-lg bg-primary text-primary-foreground btn-hover"
-              disabled={!title.trim()}
-            >
-              Add Article
-            </button>
-          </div>
+            <div className="mt-8 flex justify-end space-x-3">
+              <button
+                type="button"
+                onClick={onClose}
+                className="px-4 py-2 rounded-lg text-muted-foreground hover:text-foreground transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                className="px-4 py-2 rounded-lg bg-primary text-primary-foreground btn-hover"
+                disabled={!watch("title")?.trim()}
+              >
+                Add Article
+              </button>
+            </div>
+          </form>
         </div>
       </div>
     </div>
   );
-};
-
-export default AddArticleModal;
+}

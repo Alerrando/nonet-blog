@@ -1,17 +1,3 @@
-.editor h1,
-.editor h2,
-.editor h3,
-.editor h4,
-.editor h5,
-.editor p,
-.editor ul,
-.editor li,
-.editor span,
-.editor strong,
-.editor code {
-    color: black !important;
-}
-
 .tiptap {
     :first-child {
         margin-top: 0;

@@ -3,7 +3,7 @@ import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 
 import AddArticleButton from "@/components/AddArticleButton";
-import AddArticleModal from "@/components/AddArticleModal";
+import { AddArticleModal } from "@/components/AddArticleModal";
 import { ArticleCard } from "@/components/ArticleCard";
 import { ArticleModel } from "@/models/ArticleModel";
 import { useBlog } from "@/provider/BlogProvider";

@@ -2,6 +2,8 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
+import { ArticleModel } from "@/models/ArticleModel";
+
 import { addItem, getAllItems } from "../services/indexedDB";
 
 interface BlogStoreProps {
