@@ -1,5 +1,6 @@
-import { ArticleModel } from "@/models/ArticleModel";
 import { openDB } from "idb";
+
+import { ArticleModel } from "@/models/ArticleModel";
 
 const DB_NAME = "blog-database";
 const STORE_NAME = "blog-store";
@@ -21,6 +22,11 @@ export const addItem = async (item: ArticleModel) => {
 export const getAllItems = async () => {
   const db = await dbPromise;
   return db.getAll(STORE_NAME);
+};
+
+export const updateItem = async (item: ArticleModel) => {
+  const db = await dbPromise;
+  return db.put(STORE_NAME, item, item.id);
 };
 
 export const deleteItem = async (id: string) => {

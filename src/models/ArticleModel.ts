@@ -4,4 +4,5 @@ export interface ArticleModel {
   summary: string;
   image: string;
   html: string;
+  lastUpdate: Date;
 }

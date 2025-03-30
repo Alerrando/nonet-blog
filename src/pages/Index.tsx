@@ -18,6 +18,8 @@ const Index = () => {
       title,
       summary,
       image: imageUrl,
+      html: "",
+      lastUpdate: new Date(),
     };
 
     await addArticleAsync(newArticle);

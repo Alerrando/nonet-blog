@@ -20,11 +20,11 @@ export function ColorPicker({ editor }: ColorPickerProps) {
           <RxColorWheel />
         </button>
       </PopoverTrigger>
-      <PopoverContent className="p-2 bg-zinc-800 rounded-lg shadow-lg grid grid-cols-3 gap-1 z-50">
+      <PopoverContent className="w-52 p-2 bg-zinc-800 rounded-lg shadow-lg grid grid-cols-3 gap-1 z-50" side="top">
         {colors.map((color) => (
           <button
             key={color}
-            className={`w-8 h-8 rounded-full hover:ring-2 hover:ring-white ${editor.isActive("textStyle", { color: color }) ? "is-active" : ""}`}
+            className={`w-8 h-8 rounded-full hover:ring-2 hover:ring-white mx-auto ${editor.isActive("textStyle", { color: color }) ? "is-active" : ""}`}
             style={{ backgroundColor: color }}
             onClick={() => editor?.chain().focus().setColor(color).run()}
             title={`Cor ${color}`}

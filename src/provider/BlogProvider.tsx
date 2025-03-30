@@ -4,7 +4,7 @@ import { createJSONStorage, persist } from "zustand/middleware";
 
 import { ArticleModel } from "@/models/ArticleModel";
 
-import { addItem, getAllItems } from "../services/indexedDB";
+import { addItem, getAllItems, updateItem } from "../services/indexedDB";
 
 interface BlogStoreProps {
   articles: ArticleModel[];
@@ -12,6 +12,7 @@ interface BlogStoreProps {
   setArticles: (data: ArticleModel[]) => void;
   setCurrentArticle: (data: ArticleModel | null) => void;
   getArticleByName: (name: string) => ArticleModel | undefined;
+  getArticleById: (id: string) => ArticleModel | undefined;
 }
 
 export const useBlogStore = create<BlogStoreProps>()(
@@ -22,6 +23,7 @@ export const useBlogStore = create<BlogStoreProps>()(
       setArticles: (data) => set({ articles: data }),
       setCurrentArticle: (data) => set({ currentArticle: data }),
       getArticleByName: (name: string) => get().articles.find((article) => article.title === name),
+      getArticleById: (id: string) => get().articles.find((article) => article.id === id),
     }),
     {
       name: "blog-storage",
@@ -35,7 +37,7 @@ export const useBlogStore = create<BlogStoreProps>()(
 );
 
 export function useBlog() {
-  const { articles, setArticles, currentArticle, setCurrentArticle, getArticleByName } = useBlogStore();
+  const { articles, setArticles, currentArticle, setCurrentArticle, getArticleByName, getArticleById } = useBlogStore();
 
   const {
     isLoading: isLoadingGetAllArticles,
@@ -49,7 +51,7 @@ export function useBlog() {
       return response;
     },
     staleTime: Infinity,
-    gcTime: 1000 * 60 * 60 * 24, // Replace cacheTime with gcTime
+    gcTime: 1000 * 60 * 60 * 24,
   });
 
   const { mutateAsync: addArticleAsync, isPending: isPendingAddArticle } = useMutation({
@@ -61,15 +63,29 @@ export function useBlog() {
     onError: () => {},
   });
 
+  const { mutateAsync: updateArticleAsync, isPending: isPendingUpdateArticle } = useMutation({
+    mutationKey: ["put-article"],
+    mutationFn: async (article: ArticleModel) => {
+      await updateItem(article);
+    },
+    onSuccess: () => {
+      console.log("Artigo atualizado com sucesso!");
+    },
+    onError: () => {},
+  });
+
   return {
     articles,
     addArticleAsync,
     refetchGetAllArticles,
+    updateArticleAsync,
     isPendingAddArticle,
     isLoadingGetAllArticles,
+    isPendingUpdateArticle,
     errorGetAllArticles,
     currentArticle,
     setCurrentArticle,
     getArticleByName,
+    getArticleById,
   };
 }
