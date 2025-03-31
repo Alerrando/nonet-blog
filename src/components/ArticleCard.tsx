@@ -1,15 +1,29 @@
+import { CiEdit } from "react-icons/ci";
 import { Link } from "react-router-dom";
 
 import { cn } from "@/lib/utils";
+import { ArticleModel } from "@/models/ArticleModel";
+import { useBlog } from "@/provider/BlogProvider";
 
 interface ArticleCardProps {
   title: string;
   summary: string;
   image: string;
   className?: string;
+  setIsModalOpen: (isOpen: boolean) => void;
+  setEdit: (edit: ArticleModel) => void;
 }
 
-export function ArticleCard({ title, summary, image, className }: ArticleCardProps) {
+export function ArticleCard({ title, summary, image, className, setIsModalOpen, setEdit }: ArticleCardProps) {
+  const { getArticleByName } = useBlog();
+
+  async function handleEdit() {
+    const aux = await getArticleByName(title);
+
+    setEdit(aux);
+    setIsModalOpen(true);
+  }
+
   return (
     <div className={cn("bg-card rounded-lg overflow-hidden shadow-sm card-hover content-animation", className)}>
       <div className="aspect-[16/9] overflow-hidden">
@@ -21,7 +35,15 @@ export function ArticleCard({ title, summary, image, className }: ArticleCardPro
       </div>
 
       <div className="p-6">
-        <h3 className="text-xl font-medium mb-2 line-clamp-2">{title}</h3>
+        <header className="w-full flex items-center justify-between">
+          <h3 className="text-xl font-medium mb-2 line-clamp-2">{title}</h3>
+
+          <CiEdit
+            size={24}
+            className="hover:text-zinc-700 transition-colors cursor-pointer"
+            onClick={() => handleEdit()}
+          />
+        </header>
         <p className="text-muted-foreground text-sm line-clamp-3">{summary}</p>
 
         <div className="mt-4">

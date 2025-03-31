@@ -1,17 +1,29 @@
 import { Link, Upload, X } from "lucide-react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
+
+import { ArticleModel } from "@/models/ArticleModel";
 
 interface AddArticleModalProps {
   isOpen: boolean;
   onClose: () => void;
   onAddArticle: (title: string, summary: string, imageUrl: string) => void;
+  edit: ArticleModel;
 }
 
-export function AddArticleModal({ isOpen, onClose, onAddArticle }: AddArticleModalProps) {
-  const { control, handleSubmit, setValue, watch } = useForm();
+export function AddArticleModal({ isOpen, onClose, onAddArticle, edit }: AddArticleModalProps) {
+  const { control, handleSubmit, setValue, watch, reset } = useForm();
   const [imageInputType, setImageInputType] = useState<"upload" | "url">("upload");
   const preview = watch("imageUrl");
+
+  useEffect(() => {
+    console.log(edit);
+    if (edit.title) {
+      setValue("title", edit.title);
+      setValue("summary", edit.summary);
+      setValue("imageUrl", edit.image);
+    }
+  }, [edit]);
 
   if (!isOpen) return null;
 
@@ -38,6 +50,8 @@ export function AddArticleModal({ isOpen, onClose, onAddArticle }: AddArticleMod
         data.imageUrl ||
           `https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&fit=crop&w=1200&q=80`,
       );
+
+      reset();
       onClose();
     }
   };
@@ -180,7 +194,7 @@ export function AddArticleModal({ isOpen, onClose, onAddArticle }: AddArticleMod
                 className="px-4 py-2 rounded-lg bg-primary text-primary-foreground btn-hover"
                 disabled={!watch("title")?.trim()}
               >
-                Add Article
+                {edit.title ? "Atualizar Artigo" : "Adicionar artigo"}
               </button>
             </div>
           </form>

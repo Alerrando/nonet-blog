@@ -1,4 +1,3 @@
-import { QueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 
@@ -9,21 +8,31 @@ import { ArticleModel } from "@/models/ArticleModel";
 import { useBlog } from "@/provider/BlogProvider";
 
 const Index = () => {
-  const { articles, addArticleAsync, refetchGetAllArticles } = useBlog();
+  const { articles, addArticleAsync, refetchGetAllArticles, updateArticleAsync } = useBlog();
+  const [edit, setEdit] = useState({} as ArticleModel);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   async function handleAddArticle(title: string, summary: string, imageUrl: string) {
-    const newArticle: ArticleModel = {
-      id: uuidv4(),
-      title,
-      summary,
-      image: imageUrl,
-      html: "",
-      lastUpdate: new Date(),
-    };
+    if (edit.title) {
+      await handleEditArticle(title, summary, imageUrl);
+    } else {
+      const newArticle: ArticleModel = {
+        id: uuidv4(),
+        title,
+        summary,
+        image: imageUrl,
+        html: "",
+        lastUpdate: new Date(),
+      };
 
-    await addArticleAsync(newArticle);
+      await addArticleAsync(newArticle);
+    }
     refetchGetAllArticles();
+  }
+
+  async function handleEditArticle(title: string, summary: string, imageUrl: string) {
+    const aux = { ...edit, title, summary, image: imageUrl, lastUpdate: new Date() };
+    await updateArticleAsync(aux);
   }
 
   return (
@@ -46,14 +55,26 @@ const Index = () => {
               image={article.image}
               className={`content-animation`}
               style={{ animationDelay: `${index * 0.1}s` }}
+              setIsModalOpen={setIsModalOpen}
+              setEdit={setEdit}
             />
           ))}
         </div>
       </div>
 
-      <AddArticleButton onClick={() => setIsModalOpen(true)} />
+      <AddArticleButton
+        onClick={() => {
+          setEdit({} as ArticleModel);
+          setIsModalOpen(true);
+        }}
+      />
 
-      <AddArticleModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onAddArticle={handleAddArticle} />
+      <AddArticleModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onAddArticle={handleAddArticle}
+        edit={edit}
+      />
     </>
   );
 };
