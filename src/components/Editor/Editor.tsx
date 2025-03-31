@@ -5,6 +5,7 @@ import BulletList from "@tiptap/extension-bullet-list";
 import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
 import { Color } from "@tiptap/extension-color";
 import Heading from "@tiptap/extension-heading";
+import Image from "@tiptap/extension-image";
 import Paragraph from "@tiptap/extension-paragraph";
 import TextStyle from "@tiptap/extension-text-style";
 import { EditorContent, useEditor } from "@tiptap/react";
@@ -23,6 +24,7 @@ import { ColorPicker } from "../ColorPicker/ColorPicker";
 import { Button } from "../ui/button";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -60,6 +62,7 @@ export function Editor({ isNewContent, saveAnnotation, currentArticle, edit, set
       BulletList,
       Color,
       TextStyle,
+      Image,
     ],
     content: currentArticle.html,
     editorProps: {
@@ -71,7 +74,8 @@ export function Editor({ isNewContent, saveAnnotation, currentArticle, edit, set
 
   function handleSave(e) {
     e.preventDefault();
-    console.log(e.target[0].value);
+
+    editor.chain().focus().setImage({ src: e.target[0].value }).run();
   }
 
   useEffect(() => {
@@ -163,9 +167,13 @@ export function Editor({ isNewContent, saveAnnotation, currentArticle, edit, set
                     </div>
 
                     <DialogFooter>
-                      <Button type="submit" className="w-full">
-                        Salvar
-                      </Button>
+                      <DialogClose asChild>
+                        <Button type="button" variant="outline">
+                          Close
+                        </Button>
+                      </DialogClose>
+
+                      <Button type="submit">Salvar</Button>
                     </DialogFooter>
                   </form>
                 </DialogContent>
@@ -221,7 +229,7 @@ export function Editor({ isNewContent, saveAnnotation, currentArticle, edit, set
           </div>
         </>
       ) : (
-        <>{currentArticle.html}</>
+        <div dangerouslySetInnerHTML={{ __html: currentArticle.html }} />
       )}
     </div>
   );

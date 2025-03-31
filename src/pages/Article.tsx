@@ -1,3 +1,4 @@
+import dayjs from "dayjs";
 import { ArrowLeft, Calendar, Clock } from "lucide-react";
 import { useEffect, useState } from "react";
 import { FaEdit } from "react-icons/fa";
@@ -67,7 +68,7 @@ export function Article() {
         <div className="flex items-center text-muted-foreground">
           <div className="flex items-center mr-4">
             <Calendar className="h-4 w-4 mr-1" />
-            <span className="text-sm">{currentArticle.lastUpdate.toLocaleDateString()}</span>
+            <span className="text-sm">{dayjs(currentArticle.lastUpdate).format("DD/MM/YYYY")}</span>
           </div>
           <div className="flex items-center">
             <Clock className="h-4 w-4 mr-1" />

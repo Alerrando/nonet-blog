@@ -1,63 +1,65 @@
-.tiptap {
-    :first-child {
-        margin-top: 0;
-    }
+:first-child {
+  margin-top: 0;
+}
 
-    /* Heading styles */
-    h1,
-    h2,
-    h3,
-    h4,
-    h5,
-    h6 {
-        line-height: 1.1;
-        text-wrap: pretty;
-    }
+/* Heading styles */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  line-height: 1.1;
+  text-wrap: pretty;
+}
 
-    h1,
-    h2,
-    h3 {
-        margin-top: 0.7rem;
-        margin-bottom: 0.7rem;
-    }
+h1,
+h2,
+h3 {
+  margin-top: 0.7rem;
+  margin-bottom: 0.7rem;
+}
 
-    h1 {
-        font-size: 1.4rem;
-    }
+h1 {
+  font-size: 1.4rem;
+}
 
-    h2 {
-      font-size: 1.2rem;
-    }
+h2 {
+  font-size: 1.2rem;
+}
 
-    h3 {
-        font-size: 1.1rem;
-    }
+h3 {
+  font-size: 1.1rem;
+}
 
-    h4,
-    h5,
-    h6 {
-        font-size: 1rem;
-    }
+h4,
+h5,
+h6 {
+  font-size: 1rem;
+}
 
-    ul,
-  ol {
-    padding: 0 1rem;
-    margin: 1.25rem 1rem 1.25rem 0.4rem;
-    
-    li p {
-      margin-top: 0.25em;
-      margin-bottom: 0.25em;
-    }
+ul,
+ol {
+  padding: 0 1rem;
+  margin: 1.25rem 1rem 1.25rem 0.4rem;
+
+  li p {
+    margin-top: 0.25em;
+    margin-bottom: 0.25em;
   }
+}
 
-  ul{
-    list-style: disc;
-  }
-  ol{
-    list-style: decimal;
+ul {
+  list-style: disc;
+}
+ol {
+  list-style: decimal;
 
-    li p {
-        margin-left: 0.50rem;
-    }
+  li p {
+    margin-left: 0.5rem;
   }
+}
+img {
+  border-radius: 8px;
+  width: 65%;
 }

@@ -26,7 +26,7 @@ export const getAllItems = async () => {
 
 export const updateItem = async (item: ArticleModel) => {
   const db = await dbPromise;
-  return db.put(STORE_NAME, item, item.id);
+  return db.put(STORE_NAME, item);
 };
 
 export const deleteItem = async (id: string) => {
