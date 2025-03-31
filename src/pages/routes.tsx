@@ -1,5 +1,6 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
+import { Toaster } from "@/components/ui/toaster";
 import { TanstackProvider } from "@/provider/TansTackProvider";
 
 import { Article } from "./Article";
@@ -10,6 +11,7 @@ import { PublicRouter } from "./PublicRouter";
 export function RootRoutes() {
   return (
     <TanstackProvider>
+      <Toaster />
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<PublicRouter />}>

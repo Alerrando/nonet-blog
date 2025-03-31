@@ -1,11 +1,12 @@
 import dayjs from "dayjs";
 import { ArrowLeft, Calendar, Clock } from "lucide-react";
 import { useEffect, useState } from "react";
-import { FaEdit } from "react-icons/fa";
+import { CiEdit, CiExport } from "react-icons/ci";
 import { Link, useParams } from "react-router-dom";
 
 import { Editor } from "@/components/Editor/Editor";
 import { Button } from "@/components/ui/button";
+import { useToast } from "@/hooks/use-toast";
 import { ArticleModel } from "@/models/ArticleModel";
 import { useBlog } from "@/provider/BlogProvider";
 
@@ -20,6 +21,7 @@ export function Article() {
     articles,
     refetchGetAllArticles,
   } = useBlog();
+  const { toast } = useToast();
   const [edit, setEdit] = useState(false);
 
   useEffect(() => {
@@ -59,12 +61,23 @@ export function Article() {
       </div>
 
       <div className="mb-8">
-        <h1 className="text-3xl md:text-4xl lg:text-5xl font-medium mb-4 relative">
-          {currentArticle.title}
+        <div className="w-full flex items-center justify-between">
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-medium mb-4 relative">{currentArticle.title}</h1>
+
           {!edit && (
-            <FaEdit className="w-6 h-6 absolute top-[30%] right-0 cursor-pointer" onClick={() => setEdit(true)} />
+            <div className="flex items-center gap-4">
+              <div
+                className="flex items-center justify-center hover:bg-zinc-700 hover:text-white transition-colors cursor-pointer rounded-md p-2"
+                onClick={() => setEdit(true)}
+              >
+                <CiEdit size={24} />
+              </div>
+              <div className="flex items-center justify-center p-2 hover:bg-zinc-700 hover:text-white transition-colors cursor-pointer rounded-md">
+                <CiExport size={24} />
+              </div>
+            </div>
           )}
-        </h1>
+        </div>
         <div className="flex items-center text-muted-foreground">
           <div className="flex items-center mr-4">
             <Calendar className="h-4 w-4 mr-1" />
@@ -105,5 +118,10 @@ export function Article() {
 
     await updateArticleAsync(auxAnnotationCurrent);
     refetchGetAllArticles();
+    toast({
+      variant: "default",
+      title: "Artigo atualizado com sucesso!",
+      className: "bg-green-600 text-white",
+    });
   }
 }
