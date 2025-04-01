@@ -92,6 +92,7 @@ export function Article() {
 
       {currentArticle && (
         <Editor
+          key={edit ? "edit-mode" : "view-mode"}
           isNewContent={false}
           saveAnnotation={handleSaveEditTask}
           currentArticle={currentArticle}
