@@ -13,27 +13,18 @@ import StarterKit from "@tiptap/starter-kit";
 import js from "highlight.js/lib/languages/javascript";
 import html from "highlight.js/lib/languages/xml";
 import { all, createLowlight } from "lowlight";
-import { useEffect } from "react";
-import { FaImage } from "react-icons/fa";
-import { RxCode, RxFontBold, RxFontItalic, RxListBullet, RxStrikethrough } from "react-icons/rx";
+import { FormEvent, useEffect } from "react";
+import { GoListOrdered, GoListUnordered } from "react-icons/go";
+import { RxCode, RxFontBold, RxFontItalic, RxStrikethrough } from "react-icons/rx";
 import { twMerge } from "tailwind-merge";
 
 import { ArticleModel } from "@/models/ArticleModel";
 
 import { ColorPicker } from "../ColorPicker/ColorPicker";
-import { Button } from "../ui/button";
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "../ui/dialog";
-import { Input } from "../ui/input";
-import { Label } from "../ui/label";
+import { FormatButton } from "../FormatButton";
+import { HeadingButton } from "../HeadingButton";
+import { DialogImage } from "./DialogImage/DialogImage";
+import { MenuBubbleEditor } from "./MenuBubbleEditor/MenuBubbleEditor";
 
 const lowlight = createLowlight(all);
 
@@ -72,7 +63,7 @@ export function Editor({ isNewContent, saveAnnotation, currentArticle, edit, set
     },
   });
 
-  function handleSave(e) {
+  function handleSave(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
     editor.chain().focus().setImage({ src: e.target[0].value }).run();
@@ -88,113 +79,38 @@ export function Editor({ isNewContent, saveAnnotation, currentArticle, edit, set
     <div className="flex flex-col gap-4 relative">
       {edit ? (
         <>
-          <div className="flex flex-wrap gap-1 p-2 bg-zinc-800 rounded-lg sticky top-24 z-20">
+          <div className="flex flex-wrap gap-4 p-2 bg-zinc-800 rounded-lg sticky top-24 z-20">
             <ColorPicker editor={editor} />
 
             <div className="flex sticky gap-1">
-              <button
-                onClick={() => editor?.chain().focus().toggleHeading({ level: 1 }).run()}
-                className={`p-2 rounded hover:bg-zinc-700 ${editor?.isActive("heading", { level: 1 }) ? "bg-violet-600 text-white" : "text-zinc-300"}`}
-              >
-                H1
-              </button>
-              <button
-                onClick={() => editor?.chain().focus().toggleHeading({ level: 2 }).run()}
-                className={`p-2 rounded hover:bg-zinc-700 ${editor?.isActive("heading", { level: 2 }) ? "bg-violet-600 text-white" : "text-zinc-300"}`}
-              >
-                H2
-              </button>
-              <button
-                onClick={() => editor?.chain().focus().toggleHeading({ level: 3 }).run()}
-                className={`p-2 rounded hover:bg-zinc-700 ${editor?.isActive("heading", { level: 3 }) ? "bg-violet-600 text-white" : "text-zinc-300"}`}
-              >
-                H3
-              </button>
+              <HeadingButton editor={editor} label="H1" level={1} />
+              <HeadingButton editor={editor} label="H2" level={2} />
+              <HeadingButton editor={editor} label="H3" level={3} />
             </div>
 
             <div className="flex gap-1">
-              <button
-                onClick={() => editor?.chain().focus().toggleBold().run()}
-                className={`p-2 rounded hover:bg-zinc-700 ${editor?.isActive("bold") ? "bg-violet-600 text-white" : "text-zinc-300"}`}
-                title="Negrito"
-              >
-                <RxFontBold />
-              </button>
-              <button
-                onClick={() => editor?.chain().focus().toggleItalic().run()}
-                className={`p-2 rounded hover:bg-zinc-700 ${editor?.isActive("italic") ? "bg-violet-600 text-white" : "text-zinc-300"}`}
-                title="Itálico"
-              >
-                <RxFontItalic />
-              </button>
-              <button
-                onClick={() => editor?.chain().focus().toggleStrike().run()}
-                className={`p-2 rounded hover:bg-zinc-700 ${editor?.isActive("strike") ? "bg-violet-600 text-white" : "text-zinc-300"}`}
-                title="Riscado"
-              >
-                <RxStrikethrough />
-              </button>
-              <button
-                onClick={() => editor?.chain().focus().toggleCode().run()}
-                className={`p-2 rounded hover:bg-zinc-700 ${editor?.isActive("code") ? "bg-violet-600 text-white" : "text-zinc-300"}`}
-                title="Código"
-              >
-                <RxCode />
-              </button>
+              <FormatButton editor={editor} icon={<RxFontBold />} fontEditorName="toggleBold" font="bold" />
+              <FormatButton editor={editor} icon={<RxFontItalic />} fontEditorName="toggleItalic" font="italic" />
+              <FormatButton editor={editor} icon={<RxStrikethrough />} fontEditorName="toggleStrike" font="strike" />
+              <FormatButton editor={editor} icon={<RxCode />} fontEditorName="toggleCode" font="code" />
 
-              <Dialog>
-                <DialogTrigger asChild>
-                  <button className={`p-2 rounded hover:bg-zinc-700 text-white`} title="Inserir imagem">
-                    <FaImage />
-                  </button>
-                </DialogTrigger>
-
-                <DialogContent className="sm:max-w-[425px]">
-                  <form action="" onSubmit={handleSave}>
-                    <DialogHeader>
-                      <DialogTitle>Adicionar Imagem</DialogTitle>
-                      <DialogDescription>
-                        Adicione uma imagem para o seu artigo. Clique em Salvar quando terminar.
-                      </DialogDescription>
-                    </DialogHeader>
-
-                    <div className="grid gap-4 py-4">
-                      {/* Campo de URL */}
-                      <div className="w-full flex flex-col gap-2">
-                        <Label htmlFor="url">Url da Imagem</Label>
-                        <Input id="url" type="url" accept="image/*" name="url" className="w-full" required />
-                      </div>
-                    </div>
-
-                    <DialogFooter>
-                      <DialogClose asChild>
-                        <Button type="button" variant="outline">
-                          Close
-                        </Button>
-                      </DialogClose>
-
-                      <Button type="submit">Salvar</Button>
-                    </DialogFooter>
-                  </form>
-                </DialogContent>
-              </Dialog>
+              <DialogImage />
             </div>
 
             <div className="flex gap-1">
-              <button
-                onClick={() => editor?.chain().focus().toggleBulletList().run()}
-                className={`p-2 rounded hover:bg-zinc-700 ${editor?.isActive("bulletList") ? "bg-violet-600 text-white" : "text-zinc-300"}`}
-                title="Lista"
-              >
-                <RxListBullet />
-              </button>
-              <button
-                onClick={() => editor?.chain().focus().toggleCodeBlock().run()}
-                className={`p-2 rounded hover:bg-zinc-700 ${editor?.isActive("codeBlock") ? "bg-violet-600 text-white" : "text-zinc-300"}`}
-                title="Bloco de código"
-              >
-                <RxCode />
-              </button>
+              <FormatButton
+                editor={editor}
+                icon={<GoListUnordered size={20} />}
+                fontEditorName="toggleBulletList"
+                font="bulletList"
+              />
+              <FormatButton
+                editor={editor}
+                icon={<GoListOrdered size={18} />}
+                fontEditorName="toggleOrderedList"
+                font="orderedList"
+              />
+              <FormatButton editor={editor} icon={<RxCode />} fontEditorName="toggleCodeBlock" font="codeBlock" />
             </div>
           </div>
 
@@ -227,6 +143,8 @@ export function Editor({ isNewContent, saveAnnotation, currentArticle, edit, set
               Salvar
             </button>
           </div>
+
+          {editor && <MenuBubbleEditor editor={editor} />}
         </>
       ) : (
         <div dangerouslySetInnerHTML={{ __html: currentArticle.html }} />
