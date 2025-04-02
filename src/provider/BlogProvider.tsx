@@ -74,6 +74,16 @@ export function useBlog() {
     onError: () => {},
   });
 
+  function verifyCurrentIsUpdate(id: number, html: string) {
+    const aux = getArticleById(id);
+
+    if (aux?.html !== html) {
+      return false;
+    }
+
+    return true;
+  }
+
   return {
     articles,
     addArticleAsync,
@@ -87,5 +97,6 @@ export function useBlog() {
     setCurrentArticle,
     getArticleByName,
     getArticleById,
+    verifyCurrentIsUpdate,
   };
 }

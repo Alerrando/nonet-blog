@@ -1,11 +1,11 @@
 import { Editor } from "@tiptap/react";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 interface FontSizeEditorProps {
   editor: Editor;
 }
 
-export function FontSizeEditor({ editor }: FontSizeEditorProps) {
+export const FontSizeEditor = React.forwardRef<HTMLDivElement, FontSizeEditorProps>(({ editor }, ref) => {
   const [fontSize, setFontSize] = useState("16px");
   const [isInputFocused, setIsInputFocused] = useState(false);
 
@@ -17,7 +17,7 @@ export function FontSizeEditor({ editor }: FontSizeEditorProps) {
   }, [editor?.state.selection]);
 
   return (
-    <div className="flex items-center">
+    <div ref={ref} className="flex items-center">
       <div className="relative">
         <select
           value={fontSize}
@@ -25,6 +25,7 @@ export function FontSizeEditor({ editor }: FontSizeEditorProps) {
             setFontSize(e.target.value);
             editor.chain().focus().setFontSize(e.target.value).run();
           }}
+          name="fontSize"
           className="bg-zinc-700 text-white text-xs rounded pl-2 pr-6 py-1 border border-zinc-600 focus:outline-none focus:ring-1 focus:ring-violet-500"
         >
           {["10px", "12px", "14px", "16px", "18px", "24px"].map((size) => (
@@ -36,4 +37,6 @@ export function FontSizeEditor({ editor }: FontSizeEditorProps) {
       </div>
     </div>
   );
-}
+});
+
+FontSizeEditor.displayName = "FontSizeEditor";

@@ -103,7 +103,7 @@ export function Article() {
     </div>
   );
 
-  async function handleSaveEditTask(getHTML: string | undefined, id: string) {
+  async function handleSaveEditTask(getHTML: string | undefined, id: string, handleButtonClick: boolean = false) {
     if (!getHTML) return;
 
     const currentContent = getHTML;
@@ -111,18 +111,23 @@ export function Article() {
 
     let auxAnnotationCurrent: ArticleModel = getArticleById(id);
 
-    auxAnnotationCurrent = {
-      ...auxAnnotationCurrent,
-      html: currentContent,
-      lastUpdate: new Date(),
-    };
+    if (auxAnnotationCurrent.html !== currentContent) {
+      auxAnnotationCurrent = {
+        ...auxAnnotationCurrent,
+        html: currentContent,
+        lastUpdate: new Date(),
+      };
 
-    await updateArticleAsync(auxAnnotationCurrent);
-    refetchGetAllArticles();
-    toast({
-      variant: "default",
-      title: "Artigo atualizado com sucesso!",
-      className: "bg-green-600 text-white",
-    });
+      await updateArticleAsync(auxAnnotationCurrent);
+      refetchGetAllArticles();
+
+      if (handleButtonClick) {
+        toast({
+          variant: "default",
+          title: "Artigo atualizado com sucesso!",
+          className: "bg-green-600 text-white",
+        });
+      }
+    }
   }
 }

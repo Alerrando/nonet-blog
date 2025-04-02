@@ -1,4 +1,5 @@
 import { Editor } from "@tiptap/react";
+import React from "react";
 
 interface FormatButtonProps {
   editor: Editor;
@@ -7,20 +8,27 @@ interface FormatButtonProps {
   font: string;
 }
 
-export function FormatButton({ editor, font, icon, fontEditorName }: FormatButtonProps) {
-  function handleClick() {
-    if (editor) {
-      editor.chain().focus()[fontEditorName]().run();
+export const FormatButton = React.forwardRef<HTMLButtonElement, FormatButtonProps>(
+  ({ editor, font, icon, fontEditorName }, ref) => {
+    function handleClick() {
+      if (editor) {
+        editor.chain().focus()[fontEditorName]().run();
+      }
     }
-  }
 
-  return (
-    <button
-      onClick={() => handleClick()}
-      className={`p-2 rounded hover:bg-zinc-700 ${editor?.isActive(font) ? "bg-violet-600 text-white" : "text-zinc-300"}`}
-      title="Negrito"
-    >
-      {icon}
-    </button>
-  );
-}
+    return (
+      <button
+        ref={ref}
+        onClick={handleClick}
+        className={`p-2 rounded hover:bg-zinc-700 ${
+          editor?.isActive(font) ? "bg-violet-600 text-white" : "text-zinc-300"
+        }`}
+        title={font}
+      >
+        {icon}
+      </button>
+    );
+  },
+);
+
+FormatButton.displayName = "FormatButton";

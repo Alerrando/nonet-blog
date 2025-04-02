@@ -13,11 +13,13 @@ import StarterKit from "@tiptap/starter-kit";
 import js from "highlight.js/lib/languages/javascript";
 import html from "highlight.js/lib/languages/xml";
 import { all, createLowlight } from "lowlight";
-import { FormEvent, useEffect } from "react";
+import { RefreshCw } from "lucide-react";
+import { FormEvent, useEffect, useState } from "react";
 import { GoListOrdered, GoListUnordered } from "react-icons/go";
 import { RxCode, RxFontBold, RxFontItalic, RxStrikethrough } from "react-icons/rx";
 import { twMerge } from "tailwind-merge";
 
+import { useToast } from "@/hooks/use-toast";
 import { FontSize } from "@/lib/FontSizeExtension";
 import { ArticleModel } from "@/models/ArticleModel";
 
@@ -42,6 +44,8 @@ type EditorProps = {
 };
 
 export function Editor({ isNewContent, saveAnnotation, currentArticle, edit, setEdit }: EditorProps) {
+  const { toast } = useToast();
+  const [isSaving, setIsSaving] = useState(false);
   const editor = useEditor({
     extensions: [
       StarterKit,
@@ -77,6 +81,25 @@ export function Editor({ isNewContent, saveAnnotation, currentArticle, edit, set
       editor.commands.setContent(currentArticle.html);
     }
   }, [currentArticle]);
+
+  const handleSaveWithFeedback = async (manual = false) => {
+    if (!editor) return;
+
+    setIsSaving(true);
+    saveAnnotation(editor.getHTML(), currentArticle.id);
+
+    setTimeout(() => {
+      setIsSaving(false);
+    }, 1500);
+  };
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      handleSaveWithFeedback();
+    }, 6000);
+
+    return () => clearTimeout(timer);
+  }, [editor?.getHTML()]);
 
   return (
     <div className="flex flex-col gap-4 relative">
@@ -116,6 +139,15 @@ export function Editor({ isNewContent, saveAnnotation, currentArticle, edit, set
                 font="orderedList"
               />
               <FormatButton editor={editor} icon={<RxCode />} fontEditorName="toggleCodeBlock" font="codeBlock" />
+            </div>
+
+            <div className="ml-auto flex items-center justify-center">
+              {isSaving && (
+                <span className="text-sm text-zinc-300 flex items-center gap-1">
+                  <RefreshCw className="h-4 w-4 animate-spin" />
+                  Salvando...
+                </span>
+              )}
             </div>
           </div>
 
