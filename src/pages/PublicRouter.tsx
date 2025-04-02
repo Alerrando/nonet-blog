@@ -1,6 +1,7 @@
 import "dayjs/locale/pt-br";
 
 import { QueryClient } from "@tanstack/react-query";
+import { Analytics } from "@vercel/analytics/react";
 import dayjs from "dayjs";
 import localeData from "dayjs/plugin/localeData";
 import weekday from "dayjs/plugin/weekday";
@@ -30,6 +31,7 @@ export function PublicRouter() {
         <Outlet />
       </main>
       <Footer />
+      <Analytics />
     </>
   );
 }

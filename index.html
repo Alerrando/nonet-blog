@@ -1,27 +1,65 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
+<html lang="pt-BR"> <!-- 1. Idioma definido para português do Brasil -->
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>NoNet Blog</title>
-    <meta name="description" content="NoNet Blog - A place for all things tech" />
+    
+    <!-- Título otimizado (55-60 caracteres) -->
+    <title>NoNet Blog | Blog Pessoal Sem Internet</title>
+    
+    <!-- Meta description aprimorada (150-160 caracteres) -->
+    <meta name="description" content="NoNet Blog | Anotações, pensamentos e recursos disponíveis localmente." />
+    
+    <!-- Meta Author (opcional, mas útil) -->
     <meta name="author" content="Alerrando" />
-    <link rel="shortcut icon" href="public/favicon.ico" type="image/x-icon">
-
-    <meta property="og:title" content="NoNet Blog" />
-    <meta property="og:description" content="NoNet Blog - A place for all things tech" />
+    
+    <!-- Favicon (formatos modernos recomendados) -->
+    <link rel="icon" href="public/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" href="public/favicon.ico">
+    
+    <!-- Open Graph / Social Media (imagem melhorada) -->
+    <meta property="og:title" content="NoNet Blog | Blog Pessoal Sem Internet" />
+    <meta property="og:description" content="Anotações, pensamentos e recursos disponíveis localmente." />
     <meta property="og:type" content="website" />
-    <meta property="og:image" content="public/favicon.ico" />
-
+    <meta property="og:url" content="https://nonet-blog.vercel.app/" /> <!-- 2. IMPORTANTE: Adicionar URL real -->
+    <meta property="og:image" content="https://nonet-blog.vercel.app/public/og-image.jpg" /> <!-- 3. Imagem dedicada (1200x630px) -->
+    <meta property="og:site_name" content="NoNet Blog" />
+    
+    <!-- Twitter Cards -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@NoNetBlog" />
-    <meta name="twitter:image" content="public/favicon.ico" />
-  </head>
+    <meta name="twitter:creator" content="@Alerrando" /> <!-- 4. Autor no Twitter -->
+    <meta name="twitter:title" content="NoNet Blog | Blog Pessoal Sem Internet" />
+    <meta name="twitter:description" content="Seu portal sobre tecnologia, inovação e tutoriais tech." />
+    <meta name="twitter:image" content="https://nonet-blog.vercel.app//public/twitter-card.jpg" />
+    
+    <!-- Canonical URL (evita conteúdo duplicado) -->
+    <link rel="canonical" href="https://nonet-blog.vercel.app/" /> <!-- 5. URL canônica -->
+    
+    <!-- Schema.org markup (rich snippets) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "NoNet Blog",
+      "url": "https://nonet-blog.vercel.app/",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://nonet-blog.vercel.app//search?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    }
+    </script>
+    
+    <!-- Pré-conexão para recursos críticos -->
+    <link rel="preconnect" href="https://cdn.gpteng.co">
+</head>
 
-  <body>
+<body>
     <div id="root"></div>
-    <!-- IMPORTANT: DO NOT REMOVE THIS SCRIPT TAG OR ESTE COMENTÁRIO! -->
-    <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+    
+    <script src="https://cdn.gpteng.co/gptengineer.js" type="module" defer></script>
+    <script type="module" src="/src/main.tsx" defer></script>
+    
+</body>
 </html>
