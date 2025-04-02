@@ -1,6 +1,8 @@
 import { BubbleMenu, Editor } from "@tiptap/react";
+import { useEffect, useState } from "react";
 import { RxCode, RxFontBold, RxFontItalic, RxStrikethrough } from "react-icons/rx";
 
+import { FontSizeEditor } from "@/components/FontSizeEditor";
 import { FormatButton } from "@/components/FormatButton";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 
@@ -9,6 +11,16 @@ interface MenuBubbleEditorProps {
 }
 
 export function MenuBubbleEditor({ editor }: MenuBubbleEditorProps) {
+  const [fontSize, setFontSize] = useState("16px");
+  const [isInputFocused, setIsInputFocused] = useState(false);
+
+  useEffect(() => {
+    if (editor) {
+      const currentSize = editor.getAttributes("textStyle").fontSize || "16px";
+      setFontSize(currentSize);
+    }
+  }, [editor?.state.selection]);
+
   return (
     <BubbleMenu editor={editor}>
       <ToggleGroup
@@ -32,6 +44,10 @@ export function MenuBubbleEditor({ editor }: MenuBubbleEditorProps) {
 
           <ToggleGroupItem asChild>
             <FormatButton editor={editor} icon={<RxCode />} fontEditorName="toggleCode" font="code" />
+          </ToggleGroupItem>
+
+          <ToggleGroupItem asChild>
+            <FontSizeEditor editor={editor} />
           </ToggleGroupItem>
         </div>
       </ToggleGroup>

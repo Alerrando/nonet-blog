@@ -6,12 +6,12 @@ const Header = () => {
       <div className="max-w-7xl mx-auto flex justify-between items-center">
         <div className="text-2xl font-heading font-medium text-foreground transition-opacity hover:opacity-80">
           <a href="/" className="no-underline">
-            My Personal Blog
+            NoNet Blog
           </a>
         </div>
 
         <nav>
-          <ul className="flex space-x-8">
+          <ul className="flex space-x-8 m-0">
             {["Home", "About", "Contact"].map((item) => (
               <li key={item} className="list-none">
                 <a

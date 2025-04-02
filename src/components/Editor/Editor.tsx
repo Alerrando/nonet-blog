@@ -18,9 +18,11 @@ import { GoListOrdered, GoListUnordered } from "react-icons/go";
 import { RxCode, RxFontBold, RxFontItalic, RxStrikethrough } from "react-icons/rx";
 import { twMerge } from "tailwind-merge";
 
+import { FontSize } from "@/lib/FontSizeExtension";
 import { ArticleModel } from "@/models/ArticleModel";
 
 import { ColorPicker } from "../ColorPicker/ColorPicker";
+import { FontSizeEditor } from "../FontSizeEditor";
 import { FormatButton } from "../FormatButton";
 import { HeadingButton } from "../HeadingButton";
 import { DialogImage } from "./DialogImage/DialogImage";
@@ -54,6 +56,7 @@ export function Editor({ isNewContent, saveAnnotation, currentArticle, edit, set
       Color,
       TextStyle,
       Image,
+      FontSize,
     ],
     content: currentArticle.html,
     editorProps: {
@@ -86,6 +89,8 @@ export function Editor({ isNewContent, saveAnnotation, currentArticle, edit, set
               <HeadingButton editor={editor} label="H1" level={1} />
               <HeadingButton editor={editor} label="H2" level={2} />
               <HeadingButton editor={editor} label="H3" level={3} />
+
+              <FontSizeEditor editor={editor} />
             </div>
 
             <div className="flex gap-1">
