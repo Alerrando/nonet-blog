@@ -25,33 +25,39 @@ export function ArticleCard({ title, summary, image, className, setIsModalOpen, 
   }
 
   return (
-    <div className={cn("bg-card rounded-lg overflow-hidden shadow-sm card-hover content-animation", className)}>
-      <div className="aspect-[16/9] overflow-hidden">
+    <div
+      className={cn(
+        "bg-card rounded-lg overflow-hidden shadow-sm card-hover content-animation",
+        "hover:shadow-md transition-shadow duration-300",
+        className,
+      )}
+    >
+      <div className="aspect-[4/3] sm:aspect-[16/9] overflow-hidden">
         <img
           src={image}
           alt={title}
           className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+          loading="lazy"
         />
       </div>
 
-      <div className="p-6">
+      <div className="p-4 sm:p-6">
         <header className="w-full flex items-center justify-between">
-          <h3 className="text-xl font-medium mb-2 line-clamp-2">{title}</h3>
+          <h3 className="text-lg sm:text-xl font-medium mb-1 sm:mb-2 line-clamp-2">{title}</h3>
 
           <CiEdit
-            size={24}
-            className="hover:text-zinc-700 transition-colors cursor-pointer"
+            size={20}
+            className="hover:text-zinc-700 transition-colors cursor-pointer min-w-[20px]"
             onClick={() => handleEdit()}
           />
         </header>
-        <p className="text-muted-foreground text-sm line-clamp-3">{summary}</p>
-
-        <div className="mt-4">
+        <p className="text-muted-foreground text-xs sm:text-sm line-clamp-3">{summary}</p>
+        <div className="mt-3 sm:mt-4">
           <Link to={`/article/${title}`}>
-            <button className="text-primary font-medium text-sm inline-flex items-center group">
+            <button className="text-primary font-medium text-xs sm:text-sm inline-flex items-center group">
               Read More
               <svg
-                className="ml-1 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1"
+                className="ml-1 h-3 w-3 sm:h-4 sm:w-4 transition-transform duration-300 group-hover:translate-x-1"
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"

@@ -102,49 +102,48 @@ export function Editor({ isNewContent, saveAnnotation, currentArticle, edit, set
   }, [editor?.getHTML()]);
 
   return (
-    <div className="flex flex-col gap-4 relative">
+    <div className="flex flex-col gap-2 sm:gap-4 relative">
       {edit ? (
         <>
-          <div className="flex flex-wrap gap-4 p-2 bg-zinc-800 rounded-lg sticky top-24 z-20">
-            <ColorPicker editor={editor} />
-
-            <div className="flex sticky gap-1">
-              <HeadingButton editor={editor} label="H1" level={1} />
-              <HeadingButton editor={editor} label="H2" level={2} />
-              <HeadingButton editor={editor} label="H3" level={3} />
-
-              <FontSizeEditor editor={editor} />
+          <div className="flex flex-wrap gap-2 sm:gap-4 p-2 bg-zinc-800 rounded-lg sticky top-16 sm:top-24 z-20">
+            <div className="flex flex-wrap gap-1 sm:gap-2 w-full sm:w-auto">
+              <ColorPicker editor={editor} />
+              <div className="flex gap-1 sm:gap-2">
+                <HeadingButton editor={editor} label="H1" level={1} />
+                <HeadingButton editor={editor} label="H2" level={2} />
+                <HeadingButton editor={editor} label="H3" level={3} />
+                <FontSizeEditor editor={editor} />
+              </div>
             </div>
 
-            <div className="flex gap-1">
+            <div className="flex flex-wrap gap-1 sm:gap-2 w-full sm:w-auto">
               <FormatButton editor={editor} icon={<RxFontBold />} fontEditorName="toggleBold" font="bold" />
               <FormatButton editor={editor} icon={<RxFontItalic />} fontEditorName="toggleItalic" font="italic" />
               <FormatButton editor={editor} icon={<RxStrikethrough />} fontEditorName="toggleStrike" font="strike" />
               <FormatButton editor={editor} icon={<RxCode />} fontEditorName="toggleCode" font="code" />
-
               <DialogImage />
             </div>
 
-            <div className="flex gap-1">
+            <div className="flex flex-wrap gap-1 sm:gap-2 w-full sm:w-auto">
               <FormatButton
                 editor={editor}
-                icon={<GoListUnordered size={20} />}
+                icon={<GoListUnordered size={18} />}
                 fontEditorName="toggleBulletList"
                 font="bulletList"
               />
               <FormatButton
                 editor={editor}
-                icon={<GoListOrdered size={18} />}
+                icon={<GoListOrdered size={16} />}
                 fontEditorName="toggleOrderedList"
                 font="orderedList"
               />
               <FormatButton editor={editor} icon={<RxCode />} fontEditorName="toggleCodeBlock" font="codeBlock" />
             </div>
 
-            <div className="ml-auto flex items-center justify-center">
+            <div className="ml-auto flex items-center justify-center w-full sm:w-auto mt-2 sm:mt-0">
               {isSaving && (
-                <span className="text-sm text-zinc-300 flex items-center gap-1">
-                  <RefreshCw className="h-4 w-4 animate-spin" />
+                <span className="text-xs sm:text-sm text-zinc-300 flex items-center gap-1">
+                  <RefreshCw className="h-3 w-3 sm:h-4 sm:w-4 animate-spin" />
                   Salvando...
                 </span>
               )}
@@ -157,24 +156,23 @@ export function Editor({ isNewContent, saveAnnotation, currentArticle, edit, set
               `w-full h-auto flex flex-col-reverse mx-auto prose prose-invert relative editor`,
               `${
                 editor?.getText().length === 0
-                  ? "after:w-auto after:h-min after:content-['Sem_Titulo'] after:block after:text-zinc-600 after:text-4xl after:absolute after:-top-2 after:z-0"
+                  ? "after:w-auto after:h-min after:content-['Sem_Titulo'] after:block after:text-zinc-600 after:text-2xl sm:text-4xl after:absolute after:-top-2 after:z-0"
                   : ""
-              }
-              ${isNewContent && "md: md:max-w-[92%] m-[0_auto!important]"}
-              md:mr-[25%]
-              `,
+              }`,
+              `px-2 sm:px-4 ${isNewContent && "md:max-w-[92%] m-[0_auto!important]"}`,
+              `md:mr-[15%] lg:mr-[25%]`,
             )}
           />
 
-          <div className="w-full h-auto flex items-center justify-end gap-4">
+          <div className="w-full h-auto flex flex-col sm:flex-row items-center justify-end gap-2 sm:gap-4 px-2 sm:px-0">
             <button
-              className="px-6 md:px-8 py-1 md:py-2 border border-zinc-600 rounded-lg hover:bg-zinc-600 text-zinc-600 hover:text-white"
+              className="w-full sm:w-auto px-4 sm:px-6 md:px-8 py-1 md:py-2 border border-zinc-600 rounded-lg hover:bg-zinc-600 text-zinc-600 hover:text-white text-sm sm:text-base"
               onClick={() => setEdit(false)}
             >
               Cancelar
             </button>
             <button
-              className="px-6 md:px-8 py-1 md:py-2 border border-green-600 rounded-lg hover:bg-green-600 text-green-600 hover:text-white"
+              className="w-full sm:w-auto px-4 sm:px-6 md:px-8 py-1 md:py-2 border border-green-600 rounded-lg hover:bg-green-600 text-green-600 hover:text-white text-sm sm:text-base"
               onClick={() => saveAnnotation(editor?.getHTML(), currentArticle.id)}
             >
               Salvar
@@ -184,7 +182,7 @@ export function Editor({ isNewContent, saveAnnotation, currentArticle, edit, set
           {editor && <MenuBubbleEditor editor={editor} />}
         </>
       ) : (
-        <div dangerouslySetInnerHTML={{ __html: currentArticle.html }} />
+        <div className="px-2 sm:px-4 md:px-0" dangerouslySetInnerHTML={{ __html: currentArticle.html }} />
       )}
     </div>
   );

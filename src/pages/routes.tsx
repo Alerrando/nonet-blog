@@ -1,3 +1,4 @@
+import { Analytics } from "@vercel/analytics/react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 import { Toaster } from "@/components/ui/toaster";
@@ -18,6 +19,7 @@ export function RootRoutes() {
             <Route path="/" element={<Index />} />
             <Route path="*" element={<NotFound />} />
             <Route path="/article/:title" element={<Article />} />
+            <Analytics />
           </Route>
         </Routes>
       </BrowserRouter>
