@@ -49,6 +49,7 @@ const Index = () => {
           {articles.map((article, index) => (
             <ArticleCard
               key={article.id}
+              id={article.id}
               title={article.title}
               summary={article.summary}
               image={article.image}

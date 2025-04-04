@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { CiEdit } from "react-icons/ci";
 import { Link } from "react-router-dom";
 
@@ -7,6 +6,7 @@ import { ArticleModel } from "@/models/ArticleModel";
 import { useBlog } from "@/provider/BlogProvider";
 
 interface ArticleCardProps {
+  id: string;
   title: string;
   summary: string;
   image: string;
@@ -15,21 +15,15 @@ interface ArticleCardProps {
   setEdit: (edit: ArticleModel) => void;
 }
 
-export function ArticleCard({ title, summary, image, className, setIsModalOpen, setEdit }: ArticleCardProps) {
-  const [aux, setAux] = useState<ArticleModel>({} as ArticleModel);
+export function ArticleCard({ id, title, summary, image, className, setIsModalOpen, setEdit }: ArticleCardProps) {
   const { getArticleByName } = useBlog();
 
-  function handleEdit() {
+  async function handleEdit() {
+    const aux = await getArticleByName(title);
+
     setEdit(aux);
     setIsModalOpen(true);
   }
-
-  useEffect(() => {
-    (async () => {
-      const aux = await getArticleByName(title);
-      setAux(aux);
-    })();
-  }, []);
 
   return (
     <div
@@ -60,7 +54,7 @@ export function ArticleCard({ title, summary, image, className, setIsModalOpen, 
         </header>
         <p className="text-muted-foreground text-xs sm:text-sm line-clamp-3">{summary}</p>
         <div className="mt-3 sm:mt-4">
-          <Link to={`/article/${aux.id}`}>
+          <Link to={`/article/${id}`}>
             <button className="text-primary font-medium text-xs sm:text-sm inline-flex items-center group">
               Read More
               <svg
