@@ -11,7 +11,7 @@ import { ArticleModel } from "@/models/ArticleModel";
 import { useBlog } from "@/provider/BlogProvider";
 
 export function Article() {
-  const { title } = useParams();
+  const { id } = useParams();
   const {
     getArticleByName,
     getArticleById,
@@ -25,10 +25,10 @@ export function Article() {
   const [edit, setEdit] = useState(false);
 
   useEffect(() => {
-    if (!title) return;
-    const aux = getArticleByName(title);
+    if (!id) return;
+    const aux = getArticleById(id);
     setCurrentArticle(aux);
-  }, [title, articles]);
+  }, [id, articles]);
 
   if (!currentArticle) {
     return (

@@ -1,12 +1,8 @@
 import "highlight.js/styles/panda-syntax-dark.css";
 import "./Editor.css";
 
-import BulletList from "@tiptap/extension-bullet-list";
-import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
 import { Color } from "@tiptap/extension-color";
-import Heading from "@tiptap/extension-heading";
 import Image from "@tiptap/extension-image";
-import Paragraph from "@tiptap/extension-paragraph";
 import TextStyle from "@tiptap/extension-text-style";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
@@ -47,21 +43,7 @@ export function Editor({ isNewContent, saveAnnotation, currentArticle, edit, set
   const { toast } = useToast();
   const [isSaving, setIsSaving] = useState(false);
   const editor = useEditor({
-    extensions: [
-      StarterKit,
-      CodeBlockLowlight.configure({
-        lowlight,
-      }),
-      Heading.configure({
-        levels: [1, 2, 3],
-      }),
-      Paragraph,
-      BulletList,
-      Color,
-      TextStyle,
-      Image,
-      FontSize,
-    ],
+    extensions: [StarterKit, Color, TextStyle, Image, FontSize],
     content: currentArticle.html,
     editorProps: {
       attributes: {
