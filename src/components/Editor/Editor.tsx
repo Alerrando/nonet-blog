@@ -43,12 +43,29 @@ export function Editor({ isNewContent, saveAnnotation, currentArticle, edit, set
   const { toast } = useToast();
   const [isSaving, setIsSaving] = useState(false);
   const editor = useEditor({
-    extensions: [StarterKit, Color, TextStyle, Image, FontSize],
-    content: currentArticle.html,
+    extensions: [
+      StarterKit.configure({
+        dropcursor: false,
+        gapcursor: false,
+      }),
+      Color,
+      TextStyle,
+      Image,
+      FontSize,
+    ],
+    content: "",
     editorProps: {
       attributes: {
         class: "h-full outline-none z-10",
       },
+      transformPastedHTML(html) {
+        return html.replace(/<img[^>]*>/g, "");
+      },
+    },
+    enableInputRules: false,
+    enablePasteRules: false,
+    parseOptions: {
+      preserveWhitespace: false,
     },
   });
 

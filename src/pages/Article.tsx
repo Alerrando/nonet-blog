@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
 import { ArrowLeft, Calendar, Clock } from "lucide-react";
-import { useEffect, useState } from "react";
+import { lazy, Suspense, useEffect, useState } from "react";
 import { CiEdit, CiExport } from "react-icons/ci";
 import { Link, useParams } from "react-router-dom";
 
@@ -91,14 +91,16 @@ export function Article() {
       </div>
 
       {currentArticle && (
-        <Editor
-          key={edit ? "edit-mode" : "view-mode"}
-          isNewContent={false}
-          saveAnnotation={handleSaveEditTask}
-          currentArticle={currentArticle}
-          edit={edit}
-          setEdit={setEdit}
-        />
+        <Suspense fallback={<div>Carregando editor...</div>}>
+          <Editor
+            key={edit ? "edit-mode" : "view-mode"}
+            isNewContent={false}
+            saveAnnotation={handleSaveEditTask}
+            currentArticle={currentArticle}
+            edit={edit}
+            setEdit={setEdit}
+          />
+        </Suspense>
       )}
     </div>
   );
