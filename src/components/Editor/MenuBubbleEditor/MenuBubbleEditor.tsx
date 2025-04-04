@@ -2,6 +2,7 @@ import { BubbleMenu, Editor } from "@tiptap/react";
 import { useEffect, useState } from "react";
 import { RxCode, RxFontBold, RxFontItalic, RxStrikethrough } from "react-icons/rx";
 
+import { ColorPicker } from "@/components/ColorPicker/ColorPicker";
 import { FontSizeEditor } from "@/components/FontSizeEditor";
 import { FormatButton } from "@/components/FormatButton";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
@@ -38,6 +39,10 @@ export function MenuBubbleEditor({ editor }: MenuBubbleEditorProps) {
         aria-label="Menu Bubble Item"
       >
         <div className="flex items-center flex-wrap">
+          <ToggleGroupItem asChild className="p-1 sm:p-2">
+            <ColorPicker editor={editor} />
+          </ToggleGroupItem>
+
           <ToggleGroupItem asChild className="p-1 sm:p-2">
             <FormatButton editor={editor} icon={<RxFontBold size={16} />} fontEditorName="toggleBold" font="bold" />
           </ToggleGroupItem>
