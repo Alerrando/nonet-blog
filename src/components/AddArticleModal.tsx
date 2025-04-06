@@ -2,7 +2,10 @@ import { Link, Upload, X } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 
+import { useToast } from "@/hooks/use-toast";
 import { ArticleModel } from "@/models/ArticleModel";
+import { useBlog } from "@/provider/BlogProvider";
+import { deleteItem } from "@/services/indexedDB";
 
 interface AddArticleModalProps {
   isOpen: boolean;
@@ -13,11 +16,12 @@ interface AddArticleModalProps {
 
 export function AddArticleModal({ isOpen, onClose, onAddArticle, edit }: AddArticleModalProps) {
   const { control, handleSubmit, setValue, watch, reset } = useForm();
+  const { refetchGetAllArticles } = useBlog();
   const [imageInputType, setImageInputType] = useState<"upload" | "url">("upload");
   const preview = watch("imageUrl");
+  const { toast } = useToast();
 
   useEffect(() => {
-    console.log(edit);
     if (edit.title) {
       setValue("title", edit.title);
       setValue("summary", edit.summary);
@@ -42,6 +46,15 @@ export function AddArticleModal({ isOpen, onClose, onAddArticle, edit }: AddArti
     setValue("imageUrl", e.target.value);
   };
 
+  const handleDeleteArticle = async () => {
+    if (window.confirm("Tem certeza que deseja deletar o artigo?")) {
+      await deleteItem(edit.id);
+      toast({ description: "Artigo deletado com sucesso!", className: "bg-green-500 text-white" });
+      refetchGetAllArticles();
+      onClose();
+    }
+  };
+
   const onSubmit = (data: any) => {
     if (data.title.trim()) {
       onAddArticle(
@@ -59,7 +72,7 @@ export function AddArticleModal({ isOpen, onClose, onAddArticle, edit }: AddArti
   return (
     <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
       <div
-        className="bg-background rounded-xl shadow-xl w-full max-w-md modal-animation overflow-hidden"
+        className="max-h-[95%] bg-background rounded-xl shadow-xl w-full max-w-lg modal-animation overflow-x-hidden overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
         {preview && (
@@ -77,7 +90,7 @@ export function AddArticleModal({ isOpen, onClose, onAddArticle, edit }: AddArti
             </button>
           </div>
 
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
             <div>
               <label htmlFor="title" className="block text-sm font-medium mb-1.5">
                 Article Title
@@ -123,20 +136,20 @@ export function AddArticleModal({ isOpen, onClose, onAddArticle, edit }: AddArti
 
               {/* Toggle between upload and URL */}
               <div className="flex mb-3">
-                <button
+                <span
                   onClick={() => setImageInputType("upload")}
                   className={`px-3 py-1.5 text-sm rounded-l-md border ${imageInputType === "upload" ? "bg-primary text-white border-primary" : "bg-background border-input"}`}
                 >
                   <Upload className="h-4 w-4 inline mr-1.5" />
                   Upload
-                </button>
-                <button
+                </span>
+                <span
                   onClick={() => setImageInputType("url")}
                   className={`px-3 py-1.5 text-sm rounded-r-md border ${imageInputType === "url" ? "bg-primary text-white border-primary" : "bg-background border-input"}`}
                 >
                   <Link className="h-4 w-4 inline mr-1.5" />
                   URL
-                </button>
+                </span>
               </div>
 
               {imageInputType === "upload" ? (
@@ -181,21 +194,33 @@ export function AddArticleModal({ isOpen, onClose, onAddArticle, edit }: AddArti
               )}
             </div>
 
-            <div className="mt-8 flex justify-end space-x-3">
-              <button
-                type="button"
-                onClick={onClose}
-                className="px-4 py-2 rounded-lg text-muted-foreground hover:text-foreground transition-colors"
-              >
-                Cancel
-              </button>
-              <button
-                type="submit"
-                className="px-4 py-2 rounded-lg bg-primary text-primary-foreground btn-hover"
-                disabled={!watch("title")?.trim()}
-              >
-                {edit.title ? "Atualizar Artigo" : "Adicionar artigo"}
-              </button>
+            <div className="w-full flex items-center justify-between mt-8">
+              {edit.title && (
+                <button
+                  type="button"
+                  className="px-4 py-2 rounded-lg bg-red-600 text-white btn-hover"
+                  onClick={handleDeleteArticle}
+                >
+                  Deletar Artigo
+                </button>
+              )}
+
+              <div className="flex justify-end space-x-3 ml-auto">
+                <button
+                  type="button"
+                  onClick={onClose}
+                  className="px-4 py-2 rounded-lg border text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-4 py-2 rounded-lg bg-primary text-primary-foreground btn-hover"
+                  disabled={!watch("title")?.trim()}
+                >
+                  {edit.title ? "Atualizar Artigo" : "Adicionar artigo"}
+                </button>
+              </div>
             </div>
           </form>
         </div>

@@ -33,7 +33,7 @@ lowlight.register("js", js);
 
 type EditorProps = {
   isNewContent: boolean;
-  saveAnnotation: (getHtml: string | undefined, id?: string) => void;
+  saveAnnotation: (getHtml: string | undefined, id?: string, handleButtonClick?: boolean) => void;
   currentArticle: ArticleModel;
   edit: boolean;
   setEdit: (edit: boolean) => void;
@@ -172,7 +172,7 @@ export function Editor({ isNewContent, saveAnnotation, currentArticle, edit, set
             </button>
             <button
               className="w-full sm:w-auto px-4 sm:px-6 md:px-8 py-1 md:py-2 border border-green-600 rounded-lg hover:bg-green-600 text-green-600 hover:text-white text-sm sm:text-base"
-              onClick={() => saveAnnotation(editor?.getHTML(), currentArticle.id)}
+              onClick={() => saveAnnotation(editor?.getHTML(), currentArticle.id, true)}
             >
               Salvar
             </button>
