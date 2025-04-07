@@ -74,7 +74,10 @@ export function Article() {
               >
                 <CiEdit size={24} />
               </div>
-              <div className="flex items-center justify-center p-2 hover:bg-zinc-700 hover:text-white transition-colors cursor-pointer rounded-md">
+              <div
+                className="flex items-center justify-center p-2 hover:bg-zinc-700 hover:text-white transition-colors cursor-pointer rounded-md"
+                onClick={() => exportArticle(currentArticle)}
+              >
                 <CiExport size={24} />
               </div>
             </div>
@@ -133,5 +136,20 @@ export function Article() {
         });
       }
     }
+  }
+
+  function exportArticle(articleData: ArticleModel) {
+    const blob = new Blob([JSON.stringify(articleData, null, 2)], {
+      type: "application/json",
+    });
+
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${articleData.title.replace(/[^a-z0-9]/gi, "_").toLowerCase()}.json`;
+    a.click();
+
+    setTimeout(() => URL.revokeObjectURL(url), 100);
   }
 }

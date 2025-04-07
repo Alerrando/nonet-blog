@@ -1,16 +1,21 @@
-import { useState } from "react";
+import { Plus } from "lucide-react";
+import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 
-import AddArticleButton from "@/components/AddArticleButton";
+import { AddArticle } from "@/components/AddArticleButton";
 import { AddArticleModal } from "@/components/AddArticleModal";
 import { ArticleCard } from "@/components/ArticleCard";
 import { ArticleModel } from "@/models/ArticleModel";
 import { useBlog } from "@/provider/BlogProvider";
 
 const Index = () => {
-  const { articles, addArticleAsync, refetchGetAllArticles, updateArticleAsync } = useBlog();
+  const { articles, addArticleAsync, refetchGetAllArticles, updateArticleAsync, setCurrentArticle } = useBlog();
   const [edit, setEdit] = useState({} as ArticleModel);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  useEffect(() => {
+    setCurrentArticle(null);
+  }, []);
 
   async function handleAddArticle(title: string, summary: string, imageUrl: string) {
     if (edit.title) {
@@ -62,7 +67,8 @@ const Index = () => {
         </div>
       </div>
 
-      <AddArticleButton
+      <AddArticle
+        icon={Plus}
         onClick={() => {
           setEdit({} as ArticleModel);
           setIsModalOpen(true);

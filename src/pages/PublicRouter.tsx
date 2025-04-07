@@ -4,9 +4,11 @@ import { QueryClient } from "@tanstack/react-query";
 import dayjs from "dayjs";
 import localeData from "dayjs/plugin/localeData";
 import weekday from "dayjs/plugin/weekday";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
+import { CiExport } from "react-icons/ci";
 import { Outlet } from "react-router-dom";
 
+import { AddArticle } from "@/components/AddArticleButton";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import { useBlog } from "@/provider/BlogProvider";
@@ -16,7 +18,8 @@ dayjs.extend(weekday);
 dayjs.extend(localeData);
 
 export function PublicRouter() {
-  const { articles } = useBlog();
+  const { articles, currentArticle, importArticle } = useBlog();
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const queryClient = new QueryClient();
 
   useEffect(() => {
@@ -28,8 +31,45 @@ export function PublicRouter() {
       <Header />
       <main className="min-h-screen pt-24 px-6 dark:bg-gray-900 dark:text-white">
         <Outlet />
+
+        <AddArticle
+          icon={CiExport}
+          onClick={() => handleClickImport()}
+          className={`bg-violet-600 text-white ${!currentArticle?.id && "right-28"}`}
+        />
+
+        <input
+          type="file"
+          ref={fileInputRef}
+          onChange={handleFileChange}
+          accept="application/json"
+          className="hidden"
+          // Não adicione value ou defaultValue aqui
+        />
       </main>
       <Footer />
     </>
   );
+
+  function handleClickImport() {
+    fileInputRef.current?.click();
+  }
+
+  function handleFileChange(e: ChangeEvent<HTMLInputElement>) {
+    const files = e.target.files;
+    if (files && files.length > 0) {
+      importArticle(files[0])
+        .then(() => {
+          if (fileInputRef.current) {
+            fileInputRef.current.value = "";
+          }
+        })
+        .catch((error) => {
+          console.error("Erro na importação:", error);
+          if (fileInputRef.current) {
+            fileInputRef.current.value = "";
+          }
+        });
+    }
+  }
 }
