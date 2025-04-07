@@ -61,9 +61,8 @@ export function AddArticleModal({ isOpen, onClose, onAddArticle, edit }: AddArti
         data.title,
         data.summary,
         data.imageUrl ||
-          `https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&fit=crop&w=1200&q=80`,
+          "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&fit=crop&w=1200&q=80",
       );
-
       reset();
       onClose();
     }
@@ -72,7 +71,7 @@ export function AddArticleModal({ isOpen, onClose, onAddArticle, edit }: AddArti
   return (
     <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
       <div
-        className="max-h-[95%] bg-background rounded-xl shadow-xl w-full max-w-lg modal-animation overflow-x-hidden overflow-y-auto"
+        className="max-h-[95%] bg-background rounded-xl shadow-xl w-full max-w-lg modal-animation overflow-x-hidden overflow-y-auto dark:bg-gray-800"
         onClick={(e) => e.stopPropagation()}
       >
         {preview && (
@@ -84,15 +83,18 @@ export function AddArticleModal({ isOpen, onClose, onAddArticle, edit }: AddArti
 
         <div className="p-6">
           <div className="flex justify-between items-center mb-6">
-            <h2 className="text-xl font-medium">Add New Article</h2>
-            <button onClick={onClose} className="text-muted-foreground hover:text-foreground transition-colors">
+            <h2 className="text-xl font-medium dark:text-white">Add New Article</h2>
+            <button
+              onClick={onClose}
+              className="text-muted-foreground hover:text-foreground transition-colors dark:text-gray-400 dark:hover:text-white"
+            >
               <X className="h-5 w-5" />
             </button>
           </div>
 
           <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
             <div>
-              <label htmlFor="title" className="block text-sm font-medium mb-1.5">
+              <label htmlFor="title" className="block text-sm font-medium mb-1.5 dark:text-gray-300">
                 Article Title
               </label>
               <Controller
@@ -103,7 +105,7 @@ export function AddArticleModal({ isOpen, onClose, onAddArticle, edit }: AddArti
                     id="title"
                     type="text"
                     {...field}
-                    className="w-full px-4 py-2.5 rounded-lg border border-input bg-background"
+                    className="w-full px-4 py-2.5 rounded-lg border border-input bg-background dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400"
                     placeholder="Enter article title"
                   />
                 )}
@@ -111,7 +113,7 @@ export function AddArticleModal({ isOpen, onClose, onAddArticle, edit }: AddArti
             </div>
 
             <div>
-              <label htmlFor="summary" className="block text-sm font-medium mb-1.5">
+              <label htmlFor="summary" className="block text-sm font-medium mb-1.5 dark:text-gray-300">
                 Article Summary
               </label>
               <Controller
@@ -122,7 +124,7 @@ export function AddArticleModal({ isOpen, onClose, onAddArticle, edit }: AddArti
                     id="summary"
                     type="text"
                     {...field}
-                    className="w-full px-4 py-2.5 rounded-lg border border-input bg-background"
+                    className="w-full px-4 py-2.5 rounded-lg border border-input bg-background dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400"
                     placeholder="Enter article summary"
                   />
                 )}
@@ -130,33 +132,43 @@ export function AddArticleModal({ isOpen, onClose, onAddArticle, edit }: AddArti
             </div>
 
             <div>
-              <label htmlFor="image" className="block text-sm font-medium mb-1.5">
+              <label htmlFor="image" className="block text-sm font-medium mb-1.5 dark:text-gray-300">
                 Background Image
               </label>
 
               {/* Toggle between upload and URL */}
               <div className="flex mb-3">
-                <span
+                <button
+                  type="button"
                   onClick={() => setImageInputType("upload")}
-                  className={`px-3 py-1.5 text-sm rounded-l-md border ${imageInputType === "upload" ? "bg-primary text-white border-primary" : "bg-background border-input"}`}
+                  className={`px-3 py-1.5 text-sm rounded-l-md border ${
+                    imageInputType === "upload"
+                      ? "bg-primary text-white border-primary dark:bg-blue-600 dark:border-blue-600"
+                      : "bg-background border-input dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300"
+                  }`}
                 >
                   <Upload className="h-4 w-4 inline mr-1.5" />
                   Upload
-                </span>
-                <span
+                </button>
+                <button
+                  type="button"
                   onClick={() => setImageInputType("url")}
-                  className={`px-3 py-1.5 text-sm rounded-r-md border ${imageInputType === "url" ? "bg-primary text-white border-primary" : "bg-background border-input"}`}
+                  className={`px-3 py-1.5 text-sm rounded-r-md border ${
+                    imageInputType === "url"
+                      ? "bg-primary text-white border-primary dark:bg-blue-600 dark:border-blue-600"
+                      : "bg-background border-input dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300"
+                  }`}
                 >
                   <Link className="h-4 w-4 inline mr-1.5" />
                   URL
-                </span>
+                </button>
               </div>
 
               {imageInputType === "upload" ? (
                 <div className="flex items-center">
                   <label
                     htmlFor="image-upload"
-                    className="cursor-pointer px-4 py-2.5 rounded-lg border border-input bg-background flex items-center"
+                    className="cursor-pointer px-4 py-2.5 rounded-lg border border-input bg-background flex items-center dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300"
                   >
                     <Upload className="h-4 w-4 mr-2" />
                     <span>Choose File</span>
@@ -184,12 +196,14 @@ export function AddArticleModal({ isOpen, onClose, onAddArticle, edit }: AddArti
                         type="url"
                         {...field}
                         onChange={(e) => handleUrlChange(e)}
-                        className="w-full px-4 py-2.5 rounded-lg border border-input bg-background"
+                        className="w-full px-4 py-2.5 rounded-lg border border-input bg-background dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400"
                         placeholder="Enter image URL"
                       />
                     )}
                   />
-                  <p className="text-xs text-muted-foreground mt-1">Example: https://example.com/image.jpg</p>
+                  <p className="text-xs text-muted-foreground mt-1 dark:text-gray-400">
+                    Example: https://example.com/image.jpg
+                  </p>
                 </div>
               )}
             </div>
@@ -198,7 +212,7 @@ export function AddArticleModal({ isOpen, onClose, onAddArticle, edit }: AddArti
               {edit.title && (
                 <button
                   type="button"
-                  className="px-4 py-2 rounded-lg bg-red-600 text-white btn-hover"
+                  className="px-4 py-2 rounded-lg bg-red-600 text-white btn-hover dark:bg-red-700 dark:hover:bg-red-800"
                   onClick={handleDeleteArticle}
                 >
                   Deletar Artigo
@@ -209,13 +223,13 @@ export function AddArticleModal({ isOpen, onClose, onAddArticle, edit }: AddArti
                 <button
                   type="button"
                   onClick={onClose}
-                  className="px-4 py-2 rounded-lg border text-muted-foreground hover:text-foreground transition-colors"
+                  className="px-4 py-2 rounded-lg border text-muted-foreground hover:text-foreground transition-colors dark:border-gray-600 dark:text-gray-300 dark:hover:text-white"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 rounded-lg bg-primary text-primary-foreground btn-hover"
+                  className="px-4 py-2 rounded-lg bg-primary text-primary-foreground btn-hover dark:bg-blue-600 dark:hover:bg-blue-700"
                   disabled={!watch("title")?.trim()}
                 >
                   {edit.title ? "Atualizar Artigo" : "Adicionar artigo"}

@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
 import { ArrowLeft, Calendar, Clock } from "lucide-react";
-import { lazy, Suspense, useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { CiEdit, CiExport } from "react-icons/ci";
 import { Link, useParams } from "react-router-dom";
 
@@ -34,9 +34,11 @@ export function Article() {
     return (
       <div className="flex flex-col items-center justify-center h-[50vh]">
         <h2 className="text-2xl font-medium mb-4">Article not found</h2>
-        <p className="text-muted-foreground mb-6">The article you're looking for doesn't exist or has been removed.</p>
+        <p className="text-muted-foreground dark:text-white/70 mb-6">
+          The article you're looking for doesn't exist or has been removed.
+        </p>
         <Link to="/">
-          <Button>
+          <Button className="dark:text-white/80 dark:hover:text-white">
             <ArrowLeft className="mr-2 h-4 w-4" />
             Back to Home
           </Button>
@@ -46,10 +48,10 @@ export function Article() {
   }
 
   return (
-    <div className="max-w-4xl mx-auto">
+    <div className="max-w-4xl mx-auto pb-8">
       <div className="mb-6">
         <Link to="/">
-          <Button variant="ghost" className="pl-0 hover:bg-transparent">
+          <Button variant="ghost" className="pl-0 hover:bg-transparent dark:text-white/80 dark:hover:text-white">
             <ArrowLeft className="mr-2 h-4 w-4" />
             Back to Articles
           </Button>

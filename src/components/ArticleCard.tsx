@@ -20,7 +20,6 @@ export function ArticleCard({ id, title, summary, image, className, setIsModalOp
 
   async function handleEdit() {
     const aux = await getArticleByName(title);
-
     setEdit(aux);
     setIsModalOpen(true);
   }
@@ -30,6 +29,7 @@ export function ArticleCard({ id, title, summary, image, className, setIsModalOp
       className={cn(
         "bg-card rounded-lg overflow-hidden shadow-sm card-hover content-animation",
         "hover:shadow-md transition-shadow duration-300",
+        "dark:bg-gray-800 dark:hover:shadow-lg dark:hover:shadow-gray-700/50",
         className,
       )}
     >
@@ -44,21 +44,21 @@ export function ArticleCard({ id, title, summary, image, className, setIsModalOp
 
       <div className="p-4 sm:p-6">
         <header className="w-full flex items-center justify-between">
-          <h3 className="text-lg sm:text-xl font-medium mb-1 sm:mb-2 line-clamp-2">{title}</h3>
+          <h3 className="text-lg sm:text-xl font-medium mb-1 sm:mb-2 line-clamp-2 dark:text-white">{title}</h3>
 
           <CiEdit
             size={20}
-            className="hover:text-zinc-700 transition-colors cursor-pointer min-w-[20px]"
+            className="hover:text-zinc-700 dark:hover:text-gray-300 transition-colors cursor-pointer min-w-[20px] dark:text-gray-400"
             onClick={() => handleEdit()}
           />
         </header>
-        <p className="text-muted-foreground text-xs sm:text-sm line-clamp-3">{summary}</p>
+        <p className="text-muted-foreground text-xs sm:text-sm line-clamp-3 dark:text-gray-400">{summary}</p>
         <div className="mt-3 sm:mt-4">
           <Link to={`/article/${id}`}>
-            <button className="text-primary font-medium text-xs sm:text-sm inline-flex items-center group">
+            <button className="text-primary font-medium text-xs sm:text-sm inline-flex items-center group dark:text-blue-400">
               Read More
               <svg
-                className="ml-1 h-3 w-3 sm:h-4 sm:w-4 transition-transform duration-300 group-hover:translate-x-1"
+                className="ml-1 h-3 w-3 sm:h-4 sm:w-4 transition-transform duration-300 group-hover:translate-x-1 dark:text-blue-400"
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"

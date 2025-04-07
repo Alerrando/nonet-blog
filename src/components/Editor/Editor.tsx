@@ -165,7 +165,7 @@ export function Editor({ isNewContent, saveAnnotation, currentArticle, edit, set
 
           <div className="w-full h-auto flex flex-col sm:flex-row items-center justify-end gap-2 sm:gap-4 px-2 sm:px-0">
             <button
-              className="w-full sm:w-auto px-4 sm:px-6 md:px-8 py-1 md:py-2 border border-zinc-600 rounded-lg hover:bg-zinc-600 text-zinc-600 hover:text-white text-sm sm:text-base"
+              className="w-full sm:w-auto px-4 sm:px-6 md:px-8 py-1 md:py-2 border border-zinc-600 rounded-lg hover:bg-zinc-600 text-zinc-600 dark:border-zinc-400 dark:hover:bg-zinc-400 dark:hover:text-white dark:text-gray-400 hover:text-white text-sm sm:text-base"
               onClick={() => setEdit(false)}
             >
               Cancelar

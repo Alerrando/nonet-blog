@@ -2,7 +2,7 @@ const Footer = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="border-t border-border mt-16 py-8 px-6">
+    <footer className="border-t border-border dark:border-border/20 py-8 px-6 dark:bg-gray-900 dark:text-white">
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>
@@ -114,7 +114,7 @@ const Footer = () => {
           </div>
         </div>
 
-        <div className="mt-8 pt-6 border-t border-border">
+        <div className="mt-8 pt-6 border-t border-border dark:border-border/20">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <p className="text-sm text-muted-foreground">© {currentYear} My Personal Blog. All rights reserved.</p>
             <p className="text-sm text-muted-foreground mt-2 md:mt-0">Designed with ♥ by You</p>

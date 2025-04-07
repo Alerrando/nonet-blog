@@ -26,7 +26,7 @@ export function PublicRouter() {
   return (
     <>
       <Header />
-      <main className="min-h-screen pt-24 px-6">
+      <main className="min-h-screen pt-24 px-6 dark:bg-gray-900 dark:text-white">
         <Outlet />
       </main>
       <Footer />
