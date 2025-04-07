@@ -8,24 +8,8 @@ const Footer = () => {
           <div>
             <h3 className="text-lg font-medium mb-3">My Personal Blog</h3>
             <p className="text-sm text-muted-foreground">
-              A space for sharing thoughts, ideas, and stories with the world.
+              Um espaço para anotações, pensamentos e recursos disponíveis localmente.
             </p>
-          </div>
-
-          <div>
-            <h3 className="text-lg font-medium mb-3">Links</h3>
-            <ul className="space-y-2">
-              {["Home", "About", "Contact", "Privacy Policy"].map((item) => (
-                <li key={item}>
-                  <a
-                    href={item === "Home" ? "/" : `/${item.toLowerCase().replace(" ", "-")}`}
-                    className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-                  >
-                    {item}
-                  </a>
-                </li>
-              ))}
-            </ul>
           </div>
 
           <div>
@@ -116,8 +100,10 @@ const Footer = () => {
 
         <div className="mt-8 pt-6 border-t border-border dark:border-border/20">
           <div className="flex flex-col md:flex-row justify-between items-center">
-            <p className="text-sm text-muted-foreground">© {currentYear} My Personal Blog. All rights reserved.</p>
-            <p className="text-sm text-muted-foreground mt-2 md:mt-0">Designed with ♥ by You</p>
+            <p className="text-sm text-muted-foreground">
+              © {currentYear} Meu blog pessoal.Todos os direitos reservados.
+            </p>
+            <p className="text-sm text-muted-foreground mt-2 md:mt-0">Designed with ♥ by Alerrando</p>
           </div>
         </div>
       </div>

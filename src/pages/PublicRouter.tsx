@@ -11,7 +11,7 @@ import { Outlet } from "react-router-dom";
 import { AddArticle } from "@/components/AddArticleButton";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
-import { useImportExport } from "@/hook/useImportExport";
+import { useImportExport } from "@/hooks/useImportExport";
 import { useBlog } from "@/provider/BlogProvider";
 
 dayjs.locale("pt-br");

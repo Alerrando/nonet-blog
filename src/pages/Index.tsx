@@ -5,8 +5,8 @@ import { v4 as uuidv4 } from "uuid";
 import { AddArticle } from "@/components/AddArticleButton";
 import { AddArticleModal } from "@/components/AddArticleModal";
 import { ArticleCard } from "@/components/ArticleCard";
-import { useMutationAddArticle } from "@/hook/useMutationAddArticle";
-import { useMutationPutArticle } from "@/hook/useMutationPutArticle";
+import { useMutationAddArticle } from "@/hooks/useMutationAddArticle";
+import { useMutationPutArticle } from "@/hooks/useMutationPutArticle";
 import { ArticleModel } from "@/models/ArticleModel";
 import { useBlog } from "@/provider/BlogProvider";
 

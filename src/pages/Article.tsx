@@ -7,9 +7,9 @@ import { Link, useParams } from "react-router-dom";
 import { Editor } from "@/components/Editor/Editor";
 import { HistoryContent } from "@/components/HistoryContent/HistoryContent";
 import { Button } from "@/components/ui/button";
-import { useImportExport } from "@/hook/useImportExport";
-import { useMutationPutArticle } from "@/hook/useMutationPutArticle";
 import { useToast } from "@/hooks/use-toast";
+import { useImportExport } from "@/hooks/useImportExport";
+import { useMutationPutArticle } from "@/hooks/useMutationPutArticle";
 import { ArticleModel } from "@/models/ArticleModel";
 import { useBlog } from "@/provider/BlogProvider";
 
