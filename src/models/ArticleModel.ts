@@ -1,3 +1,5 @@
+import { HistoryArticleModel } from "./HistoryArticleModel";
+
 export interface ArticleModel {
   id: string;
   title: string;
@@ -5,4 +7,5 @@ export interface ArticleModel {
   image: string;
   html: string;
   lastUpdate: Date;
+  history?: HistoryArticleModel[];
 }

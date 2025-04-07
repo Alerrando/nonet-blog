@@ -5,7 +5,10 @@ import { CiEdit, CiExport } from "react-icons/ci";
 import { Link, useParams } from "react-router-dom";
 
 import { Editor } from "@/components/Editor/Editor";
+import { HistoryContent } from "@/components/HistoryContent/HistoryContent";
 import { Button } from "@/components/ui/button";
+import { useImportExport } from "@/hook/useImportExport";
+import { useMutationPutArticle } from "@/hook/useMutationPutArticle";
 import { useToast } from "@/hooks/use-toast";
 import { ArticleModel } from "@/models/ArticleModel";
 import { useBlog } from "@/provider/BlogProvider";
@@ -15,14 +18,16 @@ export function Article() {
   const {
     getArticleByName,
     getArticleById,
-    updateArticleAsync,
     setCurrentArticle,
     currentArticle,
     articles,
     refetchGetAllArticles,
+    createNewVersion,
   } = useBlog();
   const { toast } = useToast();
   const [edit, setEdit] = useState(false);
+  const { exportArticle } = useImportExport();
+  const { updateArticleAsync } = useMutationPutArticle();
 
   useEffect(() => {
     if (!id) return;
@@ -107,6 +112,8 @@ export function Article() {
           />
         </Suspense>
       )}
+
+      <HistoryContent />
     </div>
   );
 
@@ -119,10 +126,13 @@ export function Article() {
     let auxAnnotationCurrent: ArticleModel = getArticleById(id);
 
     if (auxAnnotationCurrent.html !== currentContent) {
+      const newHistory = createNewVersion(currentContent, null);
+
       auxAnnotationCurrent = {
         ...auxAnnotationCurrent,
         html: currentContent,
         lastUpdate: new Date(),
+        history: newHistory,
       };
 
       await updateArticleAsync(auxAnnotationCurrent);
@@ -136,20 +146,5 @@ export function Article() {
         });
       }
     }
-  }
-
-  function exportArticle(articleData: ArticleModel) {
-    const blob = new Blob([JSON.stringify(articleData, null, 2)], {
-      type: "application/json",
-    });
-
-    const url = URL.createObjectURL(blob);
-
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `${articleData.title.replace(/[^a-z0-9]/gi, "_").toLowerCase()}.json`;
-    a.click();
-
-    setTimeout(() => URL.revokeObjectURL(url), 100);
   }
 }

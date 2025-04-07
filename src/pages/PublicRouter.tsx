@@ -11,6 +11,7 @@ import { Outlet } from "react-router-dom";
 import { AddArticle } from "@/components/AddArticleButton";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
+import { useImportExport } from "@/hook/useImportExport";
 import { useBlog } from "@/provider/BlogProvider";
 
 dayjs.locale("pt-br");
@@ -18,7 +19,8 @@ dayjs.extend(weekday);
 dayjs.extend(localeData);
 
 export function PublicRouter() {
-  const { articles, currentArticle, importArticle } = useBlog();
+  const { articles, currentArticle } = useBlog();
+  const { importArticle } = useImportExport();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const queryClient = new QueryClient();
 
@@ -44,7 +46,6 @@ export function PublicRouter() {
           onChange={handleFileChange}
           accept="application/json"
           className="hidden"
-          // Não adicione value ou defaultValue aqui
         />
       </main>
       <Footer />

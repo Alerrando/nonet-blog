@@ -1,12 +1,13 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
-import React from "react";
+import { useQuery } from "@tanstack/react-query";
+import { v4 as uuidv4 } from "uuid";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
 import { useToast } from "@/hooks/use-toast";
 import { ArticleModel } from "@/models/ArticleModel";
+import { HistoryArticleModel } from "@/models/HistoryArticleModel";
 
-import { addItem, getAllItems, updateItem } from "../services/indexedDB";
+import { getAllItems } from "../services/indexedDB";
 
 interface BlogStoreProps {
   articles: ArticleModel[];
@@ -57,26 +58,6 @@ export function useBlog() {
     gcTime: 1000 * 60 * 60 * 24,
   });
 
-  const { mutateAsync: addArticleAsync, isPending: isPendingAddArticle } = useMutation({
-    mutationKey: ["add-article"],
-    mutationFn: async (article: ArticleModel) => {
-      await addItem(article);
-    },
-    onSuccess: () => {},
-    onError: () => {},
-  });
-
-  const { mutateAsync: updateArticleAsync, isPending: isPendingUpdateArticle } = useMutation({
-    mutationKey: ["put-article"],
-    mutationFn: async (article: ArticleModel) => {
-      await updateItem(article);
-    },
-    onSuccess: () => {
-      console.log("Artigo atualizado com sucesso!");
-    },
-    onError: () => {},
-  });
-
   function verifyCurrentIsUpdate(id: number, html: string) {
     const aux = getArticleById(id);
 
@@ -87,50 +68,30 @@ export function useBlog() {
     return true;
   }
 
-  async function importArticle(event: React.ChangeEvent<HTMLInputElement>) {
-    if (!event) return;
+  function createNewVersion(content: string, parentVersion: string | null = null): HistoryArticleModel {
+    const now = new Date();
+    const idUuid = uuidv4();
 
-    const reader = new FileReader();
-
-    reader.onload = async (e) => {
-      try {
-        const articleData = JSON.parse(e.target?.result as string);
-
-        if (!articleData.id || !articleData.title || !articleData.html) {
-          throw new Error("Formato de arquivo inválido");
-        }
-
-        if (articles.find((article) => article.id === articleData.id)) {
-          toast({ description: "Artigo ja cadastrado", className: "bg-red-500 text-white" });
-          return;
-        }
-
-        await addArticleAsync(articleData as ArticleModel);
-        refetchGetAllArticles();
-        toast({ description: "Artigo importado com sucesso!" });
-      } catch (error) {
-        console.error("Erro ao importar artigo:", error);
-        toast({ description: "Erro ao importar artigo", className: "bg-red-500 text-white" });
-      }
+    return {
+      id: idUuid,
+      parentId: parentVersion || null,
+      name: idUuid,
+      createdAt: now,
+      updatedAt: now,
+      content,
     };
-
-    reader.readAsText(event);
   }
 
   return {
     articles,
-    addArticleAsync,
     refetchGetAllArticles,
-    updateArticleAsync,
-    isPendingAddArticle,
     isLoadingGetAllArticles,
-    isPendingUpdateArticle,
     errorGetAllArticles,
     currentArticle,
     setCurrentArticle,
     getArticleByName,
     getArticleById,
     verifyCurrentIsUpdate,
-    importArticle,
+    createNewVersion,
   };
 }

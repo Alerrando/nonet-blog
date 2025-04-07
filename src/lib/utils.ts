@@ -1,7 +1,8 @@
-import { ArticleModel } from "@/models/ArticleModel"
-import { clsx, type ClassValue } from "clsx"
-import { twMerge } from "tailwind-merge"
-import { v4 as uuidv4 } from 'uuid';
+import { type ClassValue, clsx } from "clsx";
+import { twMerge } from "tailwind-merge";
+import { v4 as uuidv4 } from "uuid";
+
+import { ArticleModel } from "@/models/ArticleModel";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -39,7 +40,8 @@ export const initialBlogState: ArticleModel[] = [
   {
     id: uuidv4(),
     title: "Typography Fundamentals for Web Design",
-    summary: "Understand the basics of typography and how to choose and pair fonts for maximum readability and visual appeal in your web projects.",
-    image: "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=1200&q=80"
-  }
-]
+    summary:
+      "Understand the basics of typography and how to choose and pair fonts for maximum readability and visual appeal in your web projects.",
+    image: "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=1200&q=80",
+  },
+];

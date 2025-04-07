@@ -5,13 +5,17 @@ import { v4 as uuidv4 } from "uuid";
 import { AddArticle } from "@/components/AddArticleButton";
 import { AddArticleModal } from "@/components/AddArticleModal";
 import { ArticleCard } from "@/components/ArticleCard";
+import { useMutationAddArticle } from "@/hook/useMutationAddArticle";
+import { useMutationPutArticle } from "@/hook/useMutationPutArticle";
 import { ArticleModel } from "@/models/ArticleModel";
 import { useBlog } from "@/provider/BlogProvider";
 
 const Index = () => {
-  const { articles, addArticleAsync, refetchGetAllArticles, updateArticleAsync, setCurrentArticle } = useBlog();
+  const { articles, refetchGetAllArticles, setCurrentArticle } = useBlog();
   const [edit, setEdit] = useState({} as ArticleModel);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const { addArticleAsync } = useMutationAddArticle();
+  const { updateArticleAsync } = useMutationPutArticle();
 
   useEffect(() => {
     setCurrentArticle(null);

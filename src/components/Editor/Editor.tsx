@@ -53,7 +53,7 @@ export function Editor({ isNewContent, saveAnnotation, currentArticle, edit, set
       Image,
       FontSize,
     ],
-    content: "",
+    content: currentArticle.content,
     editorProps: {
       attributes: {
         class: "h-full outline-none z-10",
@@ -69,17 +69,13 @@ export function Editor({ isNewContent, saveAnnotation, currentArticle, edit, set
     },
   });
 
+  console.log(currentArticle);
+
   function handleSave(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
     editor.chain().focus().setImage({ src: e.target[0].value }).run();
   }
-
-  useEffect(() => {
-    if (editor) {
-      editor.commands.setContent(currentArticle.html);
-    }
-  }, [currentArticle]);
 
   const handleSaveWithFeedback = async (manual = false) => {
     if (!editor) return;
@@ -93,6 +89,7 @@ export function Editor({ isNewContent, saveAnnotation, currentArticle, edit, set
   };
 
   useEffect(() => {
+    if (editor?.getHTML() === currentArticle.html || editor?.getHTML() === "<p></p>") return;
     const timer = setTimeout(() => {
       handleSaveWithFeedback();
     }, 6000);
