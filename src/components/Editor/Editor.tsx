@@ -74,12 +74,6 @@ export function Editor({ isNewContent, saveAnnotation, edit, setEdit }: EditorPr
     },
   });
 
-  function handleSave(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-
-    editor.chain().focus().setImage({ src: e.target[0].value }).run();
-  }
-
   const handleSaveWithFeedback = async (manual = false) => {
     if (!editor) return;
 
@@ -92,7 +86,6 @@ export function Editor({ isNewContent, saveAnnotation, edit, setEdit }: EditorPr
   };
 
   useEffect(() => {
-    console.log("dfjkbfdbjdfkdf");
     editor?.commands.setContent(currentArticle.html);
   }, []);
 
@@ -142,7 +135,7 @@ export function Editor({ isNewContent, saveAnnotation, edit, setEdit }: EditorPr
                 <FormatButton editor={editor} icon={<RxFontItalic />} fontEditorName="toggleItalic" font="italic" />
                 <FormatButton editor={editor} icon={<RxStrikethrough />} fontEditorName="toggleStrike" font="strike" />
                 <FormatButton editor={editor} icon={<RxCode />} fontEditorName="toggleCode" font="code" />
-                <DialogImage />
+                <DialogImage editor={editor} />
               </div>
 
               <div className="flex flex-wrap gap-1 sm:gap-2 w-full sm:w-auto">
