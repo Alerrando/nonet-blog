@@ -13,6 +13,7 @@ import { useMutationPutArticle } from "@/hooks/useMutationPutArticle";
 import { useQueryAllArticles } from "@/hooks/useQueryAllArticles";
 import { ArticleModel } from "@/models/ArticleModel";
 import { useBlog } from "@/provider/BlogProvider";
+import { useHistoryProvider } from "@/provider/HistoryArticleProvider";
 
 export function Article() {
   const { id } = useParams();
@@ -22,6 +23,7 @@ export function Article() {
   const { exportArticle } = useImportExport();
   const { updateArticleAsync } = useMutationPutArticle();
   const { refetchGetAllArticles } = useQueryAllArticles();
+  const { setSelectedHistory } = useHistoryProvider();
 
   useEffect(() => {
     if (!id) return;
@@ -128,6 +130,7 @@ export function Article() {
         history: [...(auxAnnotationCurrent?.history || []), newHistory],
       };
 
+      setSelectedHistory(newHistory.id);
       await updateArticleAsync(auxAnnotationCurrent);
       refetchGetAllArticles();
 

@@ -16,13 +16,16 @@ import { RxCode, RxFontBold, RxFontItalic, RxStrikethrough } from "react-icons/r
 import { twMerge } from "tailwind-merge";
 
 import { useToast } from "@/hooks/use-toast";
+import { useLoading } from "@/hooks/useLoading";
 import { FontSize } from "@/lib/FontSizeExtension";
 import { useBlog } from "@/provider/BlogProvider";
+import { useHistoryProvider } from "@/provider/HistoryArticleProvider";
 
 import { ColorPicker } from "../ColorPicker/ColorPicker";
 import { FontSizeEditor } from "../FontSizeEditor";
 import { FormatButton } from "../FormatButton";
 import { HeadingButton } from "../HeadingButton";
+import { Loading } from "../Loading";
 import { DialogImage } from "./DialogImage/DialogImage";
 import { MenuBubbleEditor } from "./MenuBubbleEditor/MenuBubbleEditor";
 
@@ -40,7 +43,9 @@ type EditorProps = {
 
 export function Editor({ isNewContent, saveAnnotation, edit, setEdit }: EditorProps) {
   const { toast } = useToast();
-  const { currentArticle, selectedHistory } = useBlog();
+  const { currentArticle } = useBlog();
+  const { selectedHistory } = useHistoryProvider();
+  const { isLoading, startLoading, stopLoading } = useLoading();
   const [isSaving, setIsSaving] = useState(false);
   const editor = useEditor({
     extensions: [
@@ -53,7 +58,7 @@ export function Editor({ isNewContent, saveAnnotation, edit, setEdit }: EditorPr
       Image,
       FontSize,
     ],
-    content: currentArticle.html,
+    content: "",
     editorProps: {
       attributes: {
         class: "h-full outline-none z-10",
@@ -87,104 +92,122 @@ export function Editor({ isNewContent, saveAnnotation, edit, setEdit }: EditorPr
   };
 
   useEffect(() => {
-    if (editor?.getHTML() === currentArticle.html || editor?.getHTML() === "<p></p>") return;
-    const timer = setTimeout(() => {
-      handleSaveWithFeedback();
-    }, 6000);
+    console.log("dfjkbfdbjdfkdf");
+    editor?.commands.setContent(currentArticle.html);
+  }, []);
 
-    return () => clearTimeout(timer);
+  useEffect(() => {
+    if (editor?.getHTML() === currentArticle.html || editor?.getHTML() === "<p></p>") return;
+
+    if (selectedHistory.length === 0) {
+      const timer = setTimeout(() => {
+        handleSaveWithFeedback();
+      }, 6000);
+
+      return () => clearTimeout(timer);
+    }
   }, [editor?.getHTML()]);
 
   useEffect(() => {
-    if (selectedHistory.length > 0) {
-      const content = currentArticle.history.find((item) => item.id === selectedHistory)?.content;
-      editor?.commands.setContent(content);
+    if (!selectedHistory || !editor || !currentArticle?.history) return;
+
+    startLoading();
+    const historyItem = currentArticle.history.find((item) => item.id === selectedHistory);
+
+    if (historyItem?.content) {
+      editor.commands.setContent(historyItem.content);
     }
-  }, [selectedHistory]);
+
+    stopLoading();
+  }, [selectedHistory, currentArticle?.history, editor]);
 
   return (
-    <div className="flex flex-col gap-2 sm:gap-4 relative">
-      {edit ? (
-        <>
-          <div className="flex flex-wrap gap-2 sm:gap-4 p-2 bg-zinc-800 rounded-lg sticky top-16 sm:top-24 z-20">
-            <div className="flex flex-wrap gap-1 sm:gap-2 w-full sm:w-auto">
-              <ColorPicker editor={editor} />
-              <div className="flex gap-1 sm:gap-2">
-                <HeadingButton editor={editor} label="H1" level={1} />
-                <HeadingButton editor={editor} label="H2" level={2} />
-                <HeadingButton editor={editor} label="H3" level={3} />
-                <FontSizeEditor editor={editor} />
+    <>
+      <div className="flex flex-col gap-2 sm:gap-4 relative">
+        {edit ? (
+          <>
+            <div className="flex flex-wrap gap-2 sm:gap-4 p-2 bg-zinc-800 rounded-lg sticky top-16 sm:top-24 z-20">
+              <div className="flex flex-wrap gap-1 sm:gap-2 w-full sm:w-auto">
+                <ColorPicker editor={editor} />
+                <div className="flex gap-1 sm:gap-2">
+                  <HeadingButton editor={editor} label="H1" level={1} />
+                  <HeadingButton editor={editor} label="H2" level={2} />
+                  <HeadingButton editor={editor} label="H3" level={3} />
+                  <FontSizeEditor editor={editor} />
+                </div>
+              </div>
+
+              <div className="flex flex-wrap gap-1 sm:gap-2 w-full sm:w-auto">
+                <FormatButton editor={editor} icon={<RxFontBold />} fontEditorName="toggleBold" font="bold" />
+                <FormatButton editor={editor} icon={<RxFontItalic />} fontEditorName="toggleItalic" font="italic" />
+                <FormatButton editor={editor} icon={<RxStrikethrough />} fontEditorName="toggleStrike" font="strike" />
+                <FormatButton editor={editor} icon={<RxCode />} fontEditorName="toggleCode" font="code" />
+                <DialogImage />
+              </div>
+
+              <div className="flex flex-wrap gap-1 sm:gap-2 w-full sm:w-auto">
+                <FormatButton
+                  editor={editor}
+                  icon={<GoListUnordered size={18} />}
+                  fontEditorName="toggleBulletList"
+                  font="bulletList"
+                />
+                <FormatButton
+                  editor={editor}
+                  icon={<GoListOrdered size={16} />}
+                  fontEditorName="toggleOrderedList"
+                  font="orderedList"
+                />
+                <FormatButton editor={editor} icon={<RxCode />} fontEditorName="toggleCodeBlock" font="codeBlock" />
+              </div>
+
+              <div className="ml-auto flex items-center justify-center w-full sm:w-auto mt-2 sm:mt-0">
+                {isSaving && (
+                  <span className="text-xs sm:text-sm text-zinc-300 flex items-center gap-1">
+                    <RefreshCw className="h-3 w-3 sm:h-4 sm:w-4 animate-spin" />
+                    Salvando...
+                  </span>
+                )}
               </div>
             </div>
 
-            <div className="flex flex-wrap gap-1 sm:gap-2 w-full sm:w-auto">
-              <FormatButton editor={editor} icon={<RxFontBold />} fontEditorName="toggleBold" font="bold" />
-              <FormatButton editor={editor} icon={<RxFontItalic />} fontEditorName="toggleItalic" font="italic" />
-              <FormatButton editor={editor} icon={<RxStrikethrough />} fontEditorName="toggleStrike" font="strike" />
-              <FormatButton editor={editor} icon={<RxCode />} fontEditorName="toggleCode" font="code" />
-              <DialogImage />
-            </div>
-
-            <div className="flex flex-wrap gap-1 sm:gap-2 w-full sm:w-auto">
-              <FormatButton
-                editor={editor}
-                icon={<GoListUnordered size={18} />}
-                fontEditorName="toggleBulletList"
-                font="bulletList"
-              />
-              <FormatButton
-                editor={editor}
-                icon={<GoListOrdered size={16} />}
-                fontEditorName="toggleOrderedList"
-                font="orderedList"
-              />
-              <FormatButton editor={editor} icon={<RxCode />} fontEditorName="toggleCodeBlock" font="codeBlock" />
-            </div>
-
-            <div className="ml-auto flex items-center justify-center w-full sm:w-auto mt-2 sm:mt-0">
-              {isSaving && (
-                <span className="text-xs sm:text-sm text-zinc-300 flex items-center gap-1">
-                  <RefreshCw className="h-3 w-3 sm:h-4 sm:w-4 animate-spin" />
-                  Salvando...
-                </span>
+            <EditorContent
+              editor={editor}
+              className={twMerge(
+                `w-full h-auto flex flex-col-reverse mx-auto prose prose-invert relative editor`,
+                `${
+                  editor?.getText().length === 0
+                    ? "after:w-auto after:h-min after:content-['Sem_Titulo'] after:block after:text-zinc-600 after:text-2xl sm:text-4xl after:absolute after:-top-2 after:z-0"
+                    : ""
+                }`,
+                `px-2 sm:px-4 ${isNewContent && "md:max-w-[92%] m-[0_auto!important]"}`,
+                `md:mr-[15%] lg:mr-[25%]`,
               )}
+            />
+
+            <div className="w-full h-auto flex flex-col sm:flex-row items-center justify-end gap-2 sm:gap-4 px-2 sm:px-0">
+              <button
+                className="w-full sm:w-auto px-4 sm:px-6 md:px-8 py-1 md:py-2 border border-zinc-600 rounded-lg hover:bg-zinc-600 text-zinc-600 dark:border-zinc-400 dark:hover:bg-zinc-400 dark:hover:text-white dark:text-gray-400 hover:text-white text-sm sm:text-base"
+                onClick={() => setEdit(false)}
+              >
+                Cancelar
+              </button>
+              <button
+                className="w-full sm:w-auto px-4 sm:px-6 md:px-8 py-1 md:py-2 border border-green-600 rounded-lg hover:bg-green-600 text-green-600 hover:text-white text-sm sm:text-base"
+                onClick={() => saveAnnotation(editor?.getHTML(), currentArticle.id, true)}
+              >
+                Salvar
+              </button>
             </div>
-          </div>
 
-          <EditorContent
-            editor={editor}
-            className={twMerge(
-              `w-full h-auto flex flex-col-reverse mx-auto prose prose-invert relative editor`,
-              `${
-                editor?.getText().length === 0
-                  ? "after:w-auto after:h-min after:content-['Sem_Titulo'] after:block after:text-zinc-600 after:text-2xl sm:text-4xl after:absolute after:-top-2 after:z-0"
-                  : ""
-              }`,
-              `px-2 sm:px-4 ${isNewContent && "md:max-w-[92%] m-[0_auto!important]"}`,
-              `md:mr-[15%] lg:mr-[25%]`,
-            )}
-          />
+            {editor && <MenuBubbleEditor editor={editor} />}
+          </>
+        ) : (
+          <div className="px-2 sm:px-4 md:px-0" dangerouslySetInnerHTML={{ __html: editor?.getHTML() }} />
+        )}
+      </div>
 
-          <div className="w-full h-auto flex flex-col sm:flex-row items-center justify-end gap-2 sm:gap-4 px-2 sm:px-0">
-            <button
-              className="w-full sm:w-auto px-4 sm:px-6 md:px-8 py-1 md:py-2 border border-zinc-600 rounded-lg hover:bg-zinc-600 text-zinc-600 dark:border-zinc-400 dark:hover:bg-zinc-400 dark:hover:text-white dark:text-gray-400 hover:text-white text-sm sm:text-base"
-              onClick={() => setEdit(false)}
-            >
-              Cancelar
-            </button>
-            <button
-              className="w-full sm:w-auto px-4 sm:px-6 md:px-8 py-1 md:py-2 border border-green-600 rounded-lg hover:bg-green-600 text-green-600 hover:text-white text-sm sm:text-base"
-              onClick={() => saveAnnotation(editor?.getHTML(), currentArticle.id, true)}
-            >
-              Salvar
-            </button>
-          </div>
-
-          {editor && <MenuBubbleEditor editor={editor} />}
-        </>
-      ) : (
-        <div className="px-2 sm:px-4 md:px-0" dangerouslySetInnerHTML={{ __html: currentArticle.html }} />
-      )}
-    </div>
+      {isLoading && <Loading />}
+    </>
   );
 }

@@ -13,19 +13,22 @@ import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import { useImportExport } from "@/hooks/useImportExport";
 import { useBlog } from "@/provider/BlogProvider";
+import { useHistoryProvider } from "@/provider/HistoryArticleProvider";
 
 dayjs.locale("pt-br");
 dayjs.extend(weekday);
 dayjs.extend(localeData);
 
 export function PublicRouter() {
-  const { articles, currentArticle } = useBlog();
+  const { articles, currentArticle, setCurrentArticle } = useBlog();
+  const { selectedHistory } = useHistoryProvider();
   const { importArticle } = useImportExport();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const queryClient = new QueryClient();
 
   useEffect(() => {
     if (articles.length === 0) queryClient.refetchQueries(["get-all-articles"]);
+    if (selectedHistory.length > 0) setCurrentArticle("");
   }, []);
 
   return (
