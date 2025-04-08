@@ -10,24 +10,18 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { useImportExport } from "@/hooks/useImportExport";
 import { useMutationPutArticle } from "@/hooks/useMutationPutArticle";
+import { useQueryAllArticles } from "@/hooks/useQueryAllArticles";
 import { ArticleModel } from "@/models/ArticleModel";
 import { useBlog } from "@/provider/BlogProvider";
 
 export function Article() {
   const { id } = useParams();
-  const {
-    getArticleByName,
-    getArticleById,
-    setCurrentArticle,
-    currentArticle,
-    articles,
-    refetchGetAllArticles,
-    createNewVersion,
-  } = useBlog();
+  const { getArticleByName, getArticleById, setCurrentArticle, currentArticle, articles, createNewVersion } = useBlog();
   const { toast } = useToast();
   const [edit, setEdit] = useState(false);
   const { exportArticle } = useImportExport();
   const { updateArticleAsync } = useMutationPutArticle();
+  const { refetchGetAllArticles } = useQueryAllArticles();
 
   useEffect(() => {
     if (!id) return;
@@ -106,7 +100,6 @@ export function Article() {
             key={edit ? "edit-mode" : "view-mode"}
             isNewContent={false}
             saveAnnotation={handleSaveEditTask}
-            currentArticle={currentArticle}
             edit={edit}
             setEdit={setEdit}
           />
@@ -132,7 +125,7 @@ export function Article() {
         ...auxAnnotationCurrent,
         html: currentContent,
         lastUpdate: new Date(),
-        history: newHistory,
+        history: [...(auxAnnotationCurrent?.history || []), newHistory],
       };
 
       await updateArticleAsync(auxAnnotationCurrent);

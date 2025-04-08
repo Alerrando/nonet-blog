@@ -7,15 +7,17 @@ import { AddArticleModal } from "@/components/AddArticleModal";
 import { ArticleCard } from "@/components/ArticleCard";
 import { useMutationAddArticle } from "@/hooks/useMutationAddArticle";
 import { useMutationPutArticle } from "@/hooks/useMutationPutArticle";
+import { useQueryAllArticles } from "@/hooks/useQueryAllArticles";
 import { ArticleModel } from "@/models/ArticleModel";
 import { useBlog } from "@/provider/BlogProvider";
 
 const Index = () => {
-  const { articles, refetchGetAllArticles, setCurrentArticle } = useBlog();
+  const { articles, setCurrentArticle } = useBlog();
   const [edit, setEdit] = useState({} as ArticleModel);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { addArticleAsync } = useMutationAddArticle();
   const { updateArticleAsync } = useMutationPutArticle();
+  const { refetchGetAllArticles } = useQueryAllArticles();
 
   useEffect(() => {
     setCurrentArticle(null);

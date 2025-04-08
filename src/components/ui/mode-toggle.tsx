@@ -17,7 +17,7 @@ export function ModeToggle() {
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-40 p-1 dark:bg-gray-800 dark:border-gray-700" align="end">
-        <div className="flex flex-col dark:[&>button]:text-gray-300 dark:[&>button:hover]:bg-gray-700 dark:[&>button]:px-3 dark:[&>button]:py-2 dark:[&>button]:text-left dark:[&>button]:rounded-sm dark:[&>button]:transition-colors">
+        <div className="flex flex-col dark:[&>button]:text-gray-300 dark:[&>button:hover]:bg-gray-700 [&>button]:px-3 [&>button]:py-2 [&>button]:text-left [&>button]:rounded-sm [&>button]:transition-colors">
           <button onClick={() => setTheme("light")}>Light</button>
           <button onClick={() => setTheme("dark")}>Dark</button>
           <button onClick={() => setTheme("system")}>System</button>

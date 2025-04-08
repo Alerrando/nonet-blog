@@ -1,19 +1,17 @@
-import { useQuery } from "@tanstack/react-query";
 import { v4 as uuidv4 } from "uuid";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
-import { useToast } from "@/hooks/use-toast";
 import { ArticleModel } from "@/models/ArticleModel";
 import { HistoryArticleModel } from "@/models/HistoryArticleModel";
-
-import { getAllItems } from "../services/indexedDB";
 
 interface BlogStoreProps {
   articles: ArticleModel[];
   currentArticle: ArticleModel | null;
+  selectedHistory: string;
   setArticles: (data: ArticleModel[]) => void;
   setCurrentArticle: (data: ArticleModel | null) => void;
+  setSelectedHistory: (data: string) => void;
   getArticleByName: (name: string) => ArticleModel | undefined;
   getArticleById: (id: string) => ArticleModel | undefined;
 }
@@ -23,8 +21,10 @@ export const useBlogStore = create<BlogStoreProps>()(
     (set, get) => ({
       articles: [] as ArticleModel[],
       currentArticle: null,
+      selectedHistory: "",
       setArticles: (data) => set({ articles: data }),
       setCurrentArticle: (data) => set({ currentArticle: data }),
+      setSelectedHistory: (data) => set({ selectedHistory: data }),
       getArticleByName: (name: string) => get().articles.find((article) => article.title === name),
       getArticleById: (id: string) => get().articles.find((article) => article.id === id),
     }),
@@ -40,23 +40,16 @@ export const useBlogStore = create<BlogStoreProps>()(
 );
 
 export function useBlog() {
-  const { articles, setArticles, currentArticle, setCurrentArticle, getArticleByName, getArticleById } = useBlogStore();
-  const { toast } = useToast();
-
   const {
-    isLoading: isLoadingGetAllArticles,
-    error: errorGetAllArticles,
-    refetch: refetchGetAllArticles,
-  } = useQuery({
-    queryKey: ["get-all-articles"],
-    queryFn: async () => {
-      const response = await getAllItems();
-      setArticles(response);
-      return response;
-    },
-    staleTime: Infinity,
-    gcTime: 1000 * 60 * 60 * 24,
-  });
+    articles,
+    setArticles,
+    currentArticle,
+    setCurrentArticle,
+    selectedHistory,
+    setSelectedHistory,
+    getArticleByName,
+    getArticleById,
+  } = useBlogStore();
 
   function verifyCurrentIsUpdate(id: number, html: string) {
     const aux = getArticleById(id);
@@ -84,11 +77,11 @@ export function useBlog() {
 
   return {
     articles,
-    refetchGetAllArticles,
-    isLoadingGetAllArticles,
-    errorGetAllArticles,
+    setArticles,
     currentArticle,
     setCurrentArticle,
+    selectedHistory,
+    setSelectedHistory,
     getArticleByName,
     getArticleById,
     verifyCurrentIsUpdate,

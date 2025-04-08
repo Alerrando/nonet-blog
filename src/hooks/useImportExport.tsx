@@ -3,11 +3,13 @@ import { ArticleModel } from "@/models/ArticleModel";
 import { useBlog } from "@/provider/BlogProvider";
 
 import { useMutationAddArticle } from "./useMutationAddArticle";
+import { useQueryAllArticles } from "./useQueryAllArticles";
 
 export function useImportExport() {
-  const { articles, refetchGetAllArticles } = useBlog();
+  const { articles } = useBlog();
   const { toast } = useToast();
   const { addArticleAsync } = useMutationAddArticle();
+  const { refetchGetAllArticles } = useQueryAllArticles();
 
   async function importArticle(event: React.ChangeEvent<HTMLInputElement>) {
     if (!event) return;

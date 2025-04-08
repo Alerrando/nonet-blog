@@ -3,8 +3,8 @@ import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 
 import { useToast } from "@/hooks/use-toast";
+import { useQueryAllArticles } from "@/hooks/useQueryAllArticles";
 import { ArticleModel } from "@/models/ArticleModel";
-import { useBlog } from "@/provider/BlogProvider";
 import { deleteItem } from "@/services/indexedDB";
 
 interface AddArticleModalProps {
@@ -16,7 +16,7 @@ interface AddArticleModalProps {
 
 export function AddArticleModal({ isOpen, onClose, onAddArticle, edit }: AddArticleModalProps) {
   const { control, handleSubmit, setValue, watch, reset } = useForm();
-  const { refetchGetAllArticles } = useBlog();
+  const { refetchGetAllArticles } = useQueryAllArticles();
   const [imageInputType, setImageInputType] = useState<"upload" | "url">("upload");
   const preview = watch("imageUrl");
   const { toast } = useToast();

@@ -17,7 +17,7 @@ import { twMerge } from "tailwind-merge";
 
 import { useToast } from "@/hooks/use-toast";
 import { FontSize } from "@/lib/FontSizeExtension";
-import { ArticleModel } from "@/models/ArticleModel";
+import { useBlog } from "@/provider/BlogProvider";
 
 import { ColorPicker } from "../ColorPicker/ColorPicker";
 import { FontSizeEditor } from "../FontSizeEditor";
@@ -34,13 +34,13 @@ lowlight.register("js", js);
 type EditorProps = {
   isNewContent: boolean;
   saveAnnotation: (getHtml: string | undefined, id?: string, handleButtonClick?: boolean) => void;
-  currentArticle: ArticleModel;
   edit: boolean;
   setEdit: (edit: boolean) => void;
 };
 
-export function Editor({ isNewContent, saveAnnotation, currentArticle, edit, setEdit }: EditorProps) {
+export function Editor({ isNewContent, saveAnnotation, edit, setEdit }: EditorProps) {
   const { toast } = useToast();
+  const { currentArticle, selectedHistory } = useBlog();
   const [isSaving, setIsSaving] = useState(false);
   const editor = useEditor({
     extensions: [
@@ -53,7 +53,7 @@ export function Editor({ isNewContent, saveAnnotation, currentArticle, edit, set
       Image,
       FontSize,
     ],
-    content: currentArticle.content,
+    content: currentArticle.html,
     editorProps: {
       attributes: {
         class: "h-full outline-none z-10",
@@ -68,8 +68,6 @@ export function Editor({ isNewContent, saveAnnotation, currentArticle, edit, set
       preserveWhitespace: false,
     },
   });
-
-  console.log(currentArticle);
 
   function handleSave(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -96,6 +94,13 @@ export function Editor({ isNewContent, saveAnnotation, currentArticle, edit, set
 
     return () => clearTimeout(timer);
   }, [editor?.getHTML()]);
+
+  useEffect(() => {
+    if (selectedHistory.length > 0) {
+      const content = currentArticle.history.find((item) => item.id === selectedHistory)?.content;
+      editor?.commands.setContent(content);
+    }
+  }, [selectedHistory]);
 
   return (
     <div className="flex flex-col gap-2 sm:gap-4 relative">
