@@ -1,10 +1,12 @@
-import { ButtonHTMLAttributes, HtmlHTMLAttributes } from "react";
+
+import { ButtonHTMLAttributes, ElementType } from "react";
+import { IconType } from "react-icons";
 import { twMerge } from "tailwind-merge";
 
-interface AddArticleButtonProps extends ButtonHTMLAttributes<HtmlHTMLAttributes> {
+interface AddArticleButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   onClick: () => void;
   classNameIcon?: string;
-  icon: HTMLElement;
+  icon: IconType | ElementType;
 }
 
 export function AddArticle({ onClick, icon: Icon, classNameIcon, ...rest }: AddArticleButtonProps) {
