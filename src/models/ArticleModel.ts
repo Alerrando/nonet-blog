@@ -7,6 +7,7 @@ export interface ArticleModel {
   summary: string;
   image: string;
   html: string;
+  createdAt: Date;
   lastUpdate: Date;
   history?: HistoryArticleModel[];
   statistics: StatisticsModel;

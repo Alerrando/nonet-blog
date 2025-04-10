@@ -14,6 +14,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useImportExport } from "@/hooks/useImportExport";
 import { useMutationPutArticle } from "@/hooks/useMutationPutArticle";
 import { useQueryAllArticles } from "@/hooks/useQueryAllArticles";
+import { fillArticleDefaults } from "@/lib/utils";
 import { ArticleModel } from "@/models/ArticleModel";
 import { useBlog } from "@/provider/BlogProvider";
 import { useHistoryProvider } from "@/provider/HistoryArticleProvider";
@@ -33,7 +34,8 @@ export function Article() {
 
   useEffect(() => {
     if (!id) return;
-    const aux = getArticleById(id);
+    let aux = getArticleById(id);
+    aux = fillArticleDefaults(aux);
     setCurrentArticle(aux);
   }, [id, articles]);
 

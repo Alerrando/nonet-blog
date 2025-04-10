@@ -37,7 +37,7 @@ export function AnalyticsDrawer({ formatDuration }: AnalyticsDrawerProps) {
         <StatCard
           icon={<Calendar className="w-5 h-5 text-zinc-400" />}
           label="Criado em"
-          value={dayjs(currentArticle?.history[0]?.createdAt || new Date()).format("DD/MM/YYYY") || ""}
+          value={dayjs(currentArticle?.createdAt || new Date()).format("DD/MM/YYYY") || ""}
         />
 
         {/* Última edição */}

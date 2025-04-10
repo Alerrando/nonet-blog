@@ -35,6 +35,7 @@ const Index = () => {
         summary,
         image: imageUrl,
         html: "",
+        createdAt: new Date(),
         lastUpdate: new Date(),
         statistics: { countViews: 0, timeRead: 0, lastAccess: new Date() },
       };

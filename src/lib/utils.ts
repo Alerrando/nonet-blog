@@ -3,6 +3,7 @@ import { twMerge } from "tailwind-merge";
 import { v4 as uuidv4 } from "uuid";
 
 import { ArticleModel } from "@/models/ArticleModel";
+import { StatisticsModel } from "@/models/StatisticsModel";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -45,3 +46,23 @@ export const initialBlogState: ArticleModel[] = [
     image: "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=1200&q=80",
   },
 ];
+
+const defaultStatistics: StatisticsModel = {
+  countViews: 0,
+  timeRead: 0,
+  lastAccess: new Date(),
+};
+
+export function fillArticleDefaults(article: Partial<ArticleModel>): ArticleModel {
+  return {
+    id: article.id ?? crypto.randomUUID(),
+    title: article.title ?? "Título não informado",
+    summary: article.summary ?? "Resumo não disponível",
+    image: article.image ?? "https://via.placeholder.com/150",
+    html: article.html ?? "<p>Conteúdo não disponível</p>",
+    createdAt: article.createdAt ?? new Date(),
+    lastUpdate: article.lastUpdate ?? new Date(),
+    history: article.history ?? [],
+    statistics: article.statistics ?? defaultStatistics,
+  };
+}
