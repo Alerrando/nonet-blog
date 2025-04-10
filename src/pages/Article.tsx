@@ -1,3 +1,4 @@
+
 import dayjs from "dayjs";
 import { ArrowLeft, Calendar, ChartLine, Clock } from "lucide-react";
 import { Suspense, useEffect, useState } from "react";
@@ -13,6 +14,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useImportExport } from "@/hooks/useImportExport";
 import { useMutationPutArticle } from "@/hooks/useMutationPutArticle";
 import { useQueryAllArticles } from "@/hooks/useQueryAllArticles";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { ArticleModel } from "@/models/ArticleModel";
 import { useBlog } from "@/provider/BlogProvider";
 import { useHistoryProvider } from "@/provider/HistoryArticleProvider";
@@ -27,6 +29,7 @@ export function Article() {
   const { updateArticleAsync } = useMutationPutArticle();
   const { refetchGetAllArticles } = useQueryAllArticles();
   const { setSelectedHistory } = useHistoryProvider();
+  const isMobile = useIsMobile();
   const timeReadNow = new Date();
 
   useEffect(() => {
@@ -42,7 +45,7 @@ export function Article() {
       if (aux.statistics) {
         aux.statistics.countViews += 1;
       } else {
-        aux.statistics = { countViews: 1, timeRead: 0 };
+        aux.statistics = { countViews: 1, timeRead: 0, lastAccess: new Date() };
       }
       await updateArticleAsync(aux);
       refetchGetAllArticles();
@@ -85,7 +88,9 @@ export function Article() {
       </div>
 
       <div
-        className={`w-full ${zenMode ? "h-[200px] mb-4" : "h-[300px] md:h-[400px] mb-8"} rounded-lg overflow-hidden transition-all duration-300`}
+        className={`w-full ${
+          zenMode ? (isMobile ? "h-[150px] mb-3" : "h-[200px] mb-4") : "h-[300px] md:h-[400px] mb-8"
+        } rounded-lg overflow-hidden transition-all duration-300`}
       >
         <img src={currentArticle.image} alt={currentArticle.title} className="w-full h-full object-cover" />
       </div>
@@ -94,7 +99,13 @@ export function Article() {
         <div className="w-full flex items-start justify-between relative">
           <div className={`flex flex-col gap-2 mb-4 ${zenMode ? "w-full" : ""}`}>
             <h1
-              className={`transition-all duration-300 ${zenMode ? "text-4xl md:text-5xl lg:text-6xl" : "text-3xl md:text-4xl lg:text-5xl"} font-medium relative`}
+              className={`transition-all duration-300 ${
+                zenMode
+                  ? isMobile
+                    ? "text-2xl md:text-3xl"
+                    : "text-4xl md:text-5xl lg:text-6xl"
+                  : "text-3xl md:text-4xl lg:text-5xl"
+              } font-medium relative`}
             >
               {currentArticle.title}
             </h1>
@@ -102,37 +113,45 @@ export function Article() {
           </div>
 
           {!edit && (
-            <div className={`flex items-center gap-4 absolute right-0 ${zenMode && "top-4"}`}>
+            <div
+              className={`flex items-center gap-2 sm:gap-4 absolute right-0 ${
+                zenMode && (isMobile ? "top-0" : "top-4")
+              }`}
+            >
               <div
-                className="flex items-center justify-center hover:bg-zinc-700 hover:text-white transition-colors cursor-pointer rounded-md p-2"
+                className="flex items-center justify-center hover:bg-zinc-700 hover:text-white transition-colors cursor-pointer rounded-md p-1 sm:p-2"
                 onClick={() => setEdit(true)}
               >
-                <CiEdit size={24} />
+                <CiEdit size={isMobile ? 20 : 24} />
               </div>
 
               {!zenMode && (
                 <>
                   <Drawer>
                     <DrawerTrigger asChild>
-                      <div className="flex items-center justify-center hover:bg-zinc-700 hover:text-white transition-colors cursor-pointer rounded-md p-2">
-                        <ChartLine size={24} />
+                      <div className="flex items-center justify-center hover:bg-zinc-700 hover:text-white transition-colors cursor-pointer rounded-md p-1 sm:p-2">
+                        <ChartLine size={isMobile ? 20 : 24} />
                       </div>
                     </DrawerTrigger>
                     <AnalyticsDrawer formatDuration={formatDuration} />
                   </Drawer>
                   <div
-                    className="flex items-center justify-center p-2 hover:bg-zinc-700 hover:text-white transition-colors cursor-pointer rounded-md"
+                    className="flex items-center justify-center p-1 sm:p-2 hover:bg-zinc-700 hover:text-white transition-colors cursor-pointer rounded-md"
                     onClick={() => exportArticle(currentArticle)}
                   >
-                    <CiExport size={24} />
+                    <CiExport size={isMobile ? 20 : 24} />
                   </div>
                 </>
               )}
             </div>
           )}
         </div>
-        <div className={`flex items-center text-muted-foreground ${zenMode ? "justify-center" : ""}`}>
-          <div className="flex items-center mr-4">
+        <div
+          className={`flex ${isMobile ? "flex-col gap-2" : "items-center"} text-muted-foreground ${
+            zenMode ? "justify-center" : ""
+          }`}
+        >
+          <div className={`flex items-center ${isMobile ? "" : "mr-4"}`}>
             <Calendar className={`h-4 w-4 mr-1 ${zenMode ? "opacity-70" : ""}`} />
             <span className="text-sm">{dayjs(currentArticle?.lastUpdate).format("DD/MM/YYYY")}</span>
           </div>

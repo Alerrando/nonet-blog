@@ -1,3 +1,4 @@
+
 import "dayjs/locale/pt-br";
 
 import { QueryClient } from "@tanstack/react-query";
@@ -13,6 +14,7 @@ import { AddArticle } from "@/components/AddArticleButton";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import { useImportExport } from "@/hooks/useImportExport";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { useBlog } from "@/provider/BlogProvider";
 import { useHistoryProvider } from "@/provider/HistoryArticleProvider";
 
@@ -26,10 +28,11 @@ export function PublicRouter() {
   const { importArticle } = useImportExport();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const localQueryClient = new QueryClient();
+  const isMobile = useIsMobile();
   useHotkeys("z", () => setZenMode(!zenMode));
 
   useEffect(() => {
-    if (articles.length === 0) localQueryClient.refetchQueries(["get-all-articles"]);
+    if (articles.length === 0) localQueryClient.refetchQueries({ queryKey: ["get-all-articles"] });
     if (selectedHistory.length > 0) setCurrentArticle(null);
   }, []);
 
@@ -38,7 +41,7 @@ export function PublicRouter() {
       <Header />
       <main
         className={`min-h-screen transition-all duration-300 ease-in-out dark:bg-gray-900 dark:text-white
-          ${zenMode ? "pt-6 zen-mode" : "pt-24"} px-6`}
+          ${zenMode ? "pt-4 sm:pt-6 zen-mode" : "pt-16 sm:pt-20 md:pt-24"} px-2 sm:px-4 md:px-6`}
       >
         <Outlet />
 
@@ -46,7 +49,9 @@ export function PublicRouter() {
           <AddArticle
             icon={CiExport}
             onClick={() => handleClickImport()}
-            className={`bg-violet-600 text-white ${!currentArticle?.id && "right-28"}`}
+            className={`bg-violet-600 text-white ${!currentArticle?.id && "right-20 sm:right-28"} ${
+              isMobile ? "h-10 w-10" : ""
+            }`}
           />
         )}
 
@@ -70,7 +75,8 @@ export function PublicRouter() {
   function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
     const files = e.target.files;
     if (files && files.length > 0) {
-      importArticle(files[0])
+      const file = files[0];
+      importArticle(file)
         .then(() => {
           if (fileInputRef.current) {
             fileInputRef.current.value = "";

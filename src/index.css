@@ -1,5 +1,4 @@
 
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -135,6 +134,28 @@
   .zen-editor-toolbar {
     @apply opacity-30 hover:opacity-100 transition-opacity;
   }
+  
+  /* Mobile responsive zen mode */
+  @media (max-width: 768px) {
+    .zen-content {
+      max-width: 100%;
+      padding: 0 1rem;
+    }
+    
+    .zen-content p {
+      @apply my-3 text-sm sm:text-base;
+    }
+    
+    .zen-content h1, 
+    .zen-content h2, 
+    .zen-content h3 {
+      @apply mb-4;
+    }
+    
+    .zen-mode {
+      @apply px-2;
+    }
+  }
 }
 
 @layer utilities {
@@ -146,5 +167,14 @@
   /* Button hover animation */
   .btn-hover {
     @apply transition-all duration-300 hover:shadow-md hover:translate-y-[-2px];
+  }
+  
+  /* Mobile zen mode utilities */
+  .zen-mobile-padding {
+    @apply px-2 sm:px-4 md:px-0;
+  }
+  
+  .zen-mobile-font {
+    @apply text-sm sm:text-base md:text-lg;
   }
 }

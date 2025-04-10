@@ -39,7 +39,7 @@ h6 {
 }
 
 p:empty {
-  min-height: 1rem; /* ou qualquer valor que ache adequado */
+  min-height: 1rem;
 }
 
 ul,
@@ -129,4 +129,54 @@ img {
   background: linear-gradient(to right, #9b87f5, #7E69AB);
   z-index: 100;
   transition: width 0.2s ease;
+}
+
+/* Mobile responsive styles for zen mode */
+@media (max-width: 640px) {
+  .zen-mode .editor p,
+  .zen-article .editor p {
+    font-size: 1rem;
+    line-height: 1.6;
+    padding: 0 0.5rem;
+  }
+  
+  .zen-mode .editor h1,
+  .zen-article .editor h1 {
+    font-size: 1.8rem;
+    margin-top: 1.5rem;
+    margin-bottom: 0.8rem;
+    padding: 0 0.5rem;
+  }
+  
+  .zen-mode .editor h2,
+  .zen-article .editor h2 {
+    font-size: 1.5rem;
+    margin-top: 1.4rem;
+    margin-bottom: 0.7rem;
+    padding: 0 0.5rem;
+  }
+  
+  .zen-mode .editor h3,
+  .zen-article .editor h3 {
+    font-size: 1.3rem;
+    margin-top: 1.2rem;
+    margin-bottom: 0.6rem;
+    padding: 0 0.5rem;
+  }
+  
+  .zen-mode .editor img,
+  .zen-article .editor img {
+    margin: 1.5rem auto;
+    width: 90%;
+  }
+  
+  .zen-mode .editor blockquote,
+  .zen-article .editor blockquote {
+    margin: 1rem 0;
+    padding-left: 1rem;
+  }
+  
+  img {
+    width: 90%;
+  }
 }

@@ -137,3 +137,54 @@
   transform: translateY(-10px);
 }
 
+/* Mobile responsive styles for zen mode */
+@media (max-width: 768px) {
+  .zen-mode,
+  .zen-article {
+    max-width: 100%;
+    padding: 0 1rem;
+    margin: 1rem auto;
+  }
+  
+  .zen-article img {
+    margin: 1.5rem auto;
+    width: 100%;
+  }
+  
+  .zen-article h1 {
+    font-size: 1.8rem;
+  }
+  
+  .zen-article h2 {
+    font-size: 1.5rem;
+  }
+  
+  .zen-article h3 {
+    font-size: 1.3rem;
+  }
+  
+  .zen-mode p,
+  .zen-article p {
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-bottom: 1.2em;
+  }
+}
+
+/* Fine adjustments for small phones */
+@media (max-width: 480px) {
+  .zen-mode,
+  .zen-article {
+    padding: 0 0.75rem;
+    margin: 0.75rem auto;
+  }
+  
+  .zen-article h1 {
+    font-size: 1.6rem;
+  }
+  
+  .zen-mode p,
+  .zen-article p {
+    font-size: 0.95rem;
+  }
+}

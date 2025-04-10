@@ -1,3 +1,4 @@
+
 import "highlight.js/styles/panda-syntax-dark.css";
 import "./Editor.css";
 
@@ -17,6 +18,7 @@ import { twMerge } from "tailwind-merge";
 
 import { useToast } from "@/hooks/use-toast";
 import { useLoading } from "@/hooks/useLoading";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { FontSize } from "@/lib/FontSizeExtension";
 import { useBlog } from "@/provider/BlogProvider";
 import { useHistoryProvider } from "@/provider/HistoryArticleProvider";
@@ -47,6 +49,8 @@ export function Editor({ isNewContent, saveAnnotation, edit, setEdit }: EditorPr
   const { selectedHistory } = useHistoryProvider();
   const { isLoading, startLoading, stopLoading } = useLoading();
   const [isSaving, setIsSaving] = useState(false);
+  const isMobile = useIsMobile();
+  
   const editor = useEditor({
     extensions: [
       StarterKit.configure({
@@ -120,7 +124,9 @@ export function Editor({ isNewContent, saveAnnotation, edit, setEdit }: EditorPr
         {edit ? (
           <>
             <div
-              className={`flex flex-wrap gap-2 sm:gap-4 p-2 bg-zinc-800 rounded-lg sticky top-16 sm:top-24 z-20 ${zenMode ? "opacity-80 hover:opacity-100 transition-opacity" : ""}`}
+              className={`flex flex-wrap gap-1 sm:gap-4 p-1 sm:p-2 bg-zinc-800 rounded-lg sticky top-12 sm:top-16 md:top-24 z-20 ${
+                zenMode ? "opacity-80 hover:opacity-100 transition-opacity" : ""
+              }`}
             >
               <div className="flex flex-wrap gap-1 sm:gap-2 w-full sm:w-auto">
                 <ColorPicker editor={editor} />
@@ -143,20 +149,20 @@ export function Editor({ isNewContent, saveAnnotation, edit, setEdit }: EditorPr
               <div className="flex flex-wrap gap-1 sm:gap-2 w-full sm:w-auto">
                 <FormatButton
                   editor={editor}
-                  icon={<GoListUnordered size={18} />}
+                  icon={<GoListUnordered size={isMobile ? 16 : 18} />}
                   fontEditorName="toggleBulletList"
                   font="bulletList"
                 />
                 <FormatButton
                   editor={editor}
-                  icon={<GoListOrdered size={16} />}
+                  icon={<GoListOrdered size={isMobile ? 14 : 16} />}
                   fontEditorName="toggleOrderedList"
                   font="orderedList"
                 />
                 <FormatButton editor={editor} icon={<RxCode />} fontEditorName="toggleCodeBlock" font="codeBlock" />
               </div>
 
-              <div className="ml-auto flex items-center justify-center w-full sm:w-auto mt-2 sm:mt-0">
+              <div className="ml-auto flex items-center justify-center w-full sm:w-auto mt-1 sm:mt-0">
                 {isSaving && (
                   <span className="text-xs sm:text-sm text-zinc-300 flex items-center gap-1">
                     <RefreshCw className="h-3 w-3 sm:h-4 sm:w-4 animate-spin" />
@@ -172,25 +178,27 @@ export function Editor({ isNewContent, saveAnnotation, edit, setEdit }: EditorPr
                 `w-full h-auto flex flex-col-reverse mx-auto prose prose-invert relative editor`,
                 `${
                   editor?.getText().length === 0
-                    ? "after:w-auto after:h-min after:content-['Sem_Titulo'] after:block after:text-zinc-600 after:text-2xl sm:text-4xl after:absolute after:-top-2 after:z-0"
+                    ? "after:w-auto after:h-min after:content-['Sem_Titulo'] after:block after:text-zinc-600 after:text-xl sm:text-2xl md:text-4xl after:absolute after:-top-2 after:z-0"
                     : ""
                 }`,
                 `px-2 sm:px-4 ${isNewContent && "md:max-w-[92%] m-[0_auto!important]"}`,
-                `${zenMode ? "md:mr-0" : "md:mr-[15%] lg:mr-[25%]"}`,
+                `${zenMode ? "md:mr-0" : isMobile ? "mr-0" : "md:mr-[15%] lg:mr-[25%]"}`,
               )}
             />
 
             <div
-              className={`w-full h-auto flex flex-col sm:flex-row items-center justify-end gap-2 sm:gap-4 px-2 sm:px-0 ${zenMode ? "opacity-80 hover:opacity-100 transition-opacity" : ""}`}
+              className={`w-full h-auto flex flex-col sm:flex-row items-center justify-end gap-2 sm:gap-4 px-2 sm:px-0 ${
+                zenMode ? "opacity-80 hover:opacity-100 transition-opacity" : ""
+              }`}
             >
               <button
-                className="w-full sm:w-auto px-4 sm:px-6 md:px-8 py-1 md:py-2 border border-zinc-600 rounded-lg hover:bg-zinc-600 text-zinc-600 dark:border-zinc-400 dark:hover:bg-zinc-400 dark:hover:text-white dark:text-gray-400 hover:text-white text-sm sm:text-base"
+                className="w-full sm:w-auto px-3 sm:px-6 md:px-8 py-1 md:py-2 border border-zinc-600 rounded-lg hover:bg-zinc-600 text-zinc-600 dark:border-zinc-400 dark:hover:bg-zinc-400 dark:hover:text-white dark:text-gray-400 hover:text-white text-sm"
                 onClick={() => setEdit(false)}
               >
                 Cancelar
               </button>
               <button
-                className="w-full sm:w-auto px-4 sm:px-6 md:px-8 py-1 md:py-2 border border-green-600 rounded-lg hover:bg-green-600 text-green-600 hover:text-white text-sm sm:text-base"
+                className="w-full sm:w-auto px-3 sm:px-6 md:px-8 py-1 md:py-2 border border-green-600 rounded-lg hover:bg-green-600 text-green-600 hover:text-white text-sm"
                 onClick={() => saveAnnotation(editor?.getHTML(), currentArticle.id, true)}
               >
                 Salvar
@@ -201,7 +209,7 @@ export function Editor({ isNewContent, saveAnnotation, edit, setEdit }: EditorPr
           </>
         ) : (
           <div
-            className={`px-2 sm:px-4 md:px-0 ${zenMode ? "zen-content text-lg leading-relaxed" : ""}`}
+            className={`px-2 sm:px-4 md:px-0 ${zenMode ? "zen-content text-base sm:text-lg leading-relaxed" : ""}`}
             dangerouslySetInnerHTML={{ __html: editor?.getHTML() }}
           />
         )}
