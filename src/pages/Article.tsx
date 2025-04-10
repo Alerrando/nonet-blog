@@ -123,12 +123,12 @@ export function Article() {
         <div className="flex items-center text-muted-foreground">
           <div className="flex items-center mr-4">
             <Calendar className="h-4 w-4 mr-1" />
-            <span className="text-sm">{dayjs(currentArticle.lastUpdate).format("DD/MM/YYYY")}</span>
+            <span className="text-sm">{dayjs(currentArticle?.lastUpdate).format("DD/MM/YYYY")}</span>
           </div>
           <div className="flex items-center">
             <Clock className="h-4 w-4 mr-1" />
             <span className="text-sm">
-              Lido a {formatDuration(dayjs(new Date()).diff(dayjs(currentArticle.statistics.lastAccess), "second"))}
+              Lido a {formatDuration(dayjs(new Date()).diff(dayjs(currentArticle?.statistics?.lastAccess), "second"))}
             </span>
           </div>
         </div>

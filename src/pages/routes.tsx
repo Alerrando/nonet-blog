@@ -16,7 +16,6 @@ export function RootRoutes() {
         <Routes>
           <Route path="/" element={<PublicRouter />}>
             <Route path="/" element={<Index />} />
-            <Route path="*" element={<NotFound />} />
             <Route path="/article/:id" element={<Article />} />
           </Route>
         </Routes>
