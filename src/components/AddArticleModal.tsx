@@ -1,3 +1,4 @@
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Link, Upload, X } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -7,15 +8,29 @@ import { useQueryAllArticles } from "@/hooks/useQueryAllArticles";
 import { ArticleModel } from "@/models/ArticleModel";
 import { deleteItem } from "@/services/indexedDB";
 
+import { defaultValuesSectionModal, SchemaArticleModal, schemaArticleModal } from "./ValidationArticleModal";
+
 interface AddArticleModalProps {
   isOpen: boolean;
   onClose: () => void;
   onAddArticle: (title: string, summary: string, imageUrl: string) => void;
   edit: ArticleModel;
+  setEdit: (edit: ArticleModel) => void;
 }
 
-export function AddArticleModal({ isOpen, onClose, onAddArticle, edit }: AddArticleModalProps) {
-  const { control, handleSubmit, setValue, watch, reset } = useForm();
+export function AddArticleModal({ isOpen, onClose, onAddArticle, edit, setEdit }: AddArticleModalProps) {
+  const {
+    control,
+    handleSubmit,
+    setValue,
+    watch,
+    reset,
+    resetField,
+    formState: { errors },
+  } = useForm<SchemaArticleModal>({
+    resolver: zodResolver(schemaArticleModal),
+    defaultValues: defaultValuesSectionModal,
+  });
   const { refetchGetAllArticles } = useQueryAllArticles();
   const [imageInputType, setImageInputType] = useState<"upload" | "url">("upload");
   const preview = watch("imageUrl");
@@ -28,6 +43,10 @@ export function AddArticleModal({ isOpen, onClose, onAddArticle, edit }: AddArti
       setValue("imageUrl", edit.image);
     }
   }, [edit]);
+
+  useEffect(() => {
+    console.log(errors);
+  }, [errors]);
 
   if (!isOpen) return null;
 
@@ -49,8 +68,10 @@ export function AddArticleModal({ isOpen, onClose, onAddArticle, edit }: AddArti
   const handleDeleteArticle = async () => {
     if (window.confirm("Tem certeza que deseja deletar o artigo?")) {
       await deleteItem(edit.id);
+      setEdit({} as ArticleModel);
       toast({ description: "Artigo deletado com sucesso!", className: "bg-green-500 text-white" });
       refetchGetAllArticles();
+      reset();
       onClose();
     }
   };
@@ -66,6 +87,11 @@ export function AddArticleModal({ isOpen, onClose, onAddArticle, edit }: AddArti
       reset();
       onClose();
     }
+  };
+
+  const onHandleClose = () => {
+    reset();
+    onClose();
   };
 
   return (
@@ -85,7 +111,7 @@ export function AddArticleModal({ isOpen, onClose, onAddArticle, edit }: AddArti
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-xl font-medium dark:text-white">Add New Article</h2>
             <button
-              onClick={onClose}
+              onClick={() => onHandleClose()}
               className="text-muted-foreground hover:text-foreground transition-colors dark:text-gray-400 dark:hover:text-white"
             >
               <X className="h-5 w-5" />
@@ -222,14 +248,14 @@ export function AddArticleModal({ isOpen, onClose, onAddArticle, edit }: AddArti
               <div className="flex justify-end space-x-3 ml-auto">
                 <button
                   type="button"
-                  onClick={onClose}
+                  onClick={() => onHandleClose()}
                   className="px-4 py-2 rounded-lg border text-muted-foreground hover:text-foreground transition-colors dark:border-gray-600 dark:text-gray-300 dark:hover:text-white"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 rounded-lg bg-primary text-primary-foreground btn-hover dark:bg-blue-600 dark:hover:bg-blue-700"
+                  className="px-4 py-2 rounded-lg bg-primary text-white btn-hover dark:bg-blue-600 dark:hover:bg-blue-700"
                   disabled={!watch("title")?.trim()}
                 >
                   {edit.title ? "Atualizar Artigo" : "Adicionar artigo"}

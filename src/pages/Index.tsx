@@ -93,6 +93,7 @@ const Index = () => {
         onClose={() => setIsModalOpen(false)}
         onAddArticle={handleAddArticle}
         edit={edit}
+        setEdit={setEdit}
       />
     </>
   );
