@@ -70,8 +70,6 @@ export function Article() {
     );
   }
 
-  console.log(dayjs(currentArticle.statistics.lastAccess).format("DD/MM/YYYY HH:mm:ss"));
-
   return (
     <div className="max-w-4xl mx-auto pb-8">
       <div className="mb-6">
