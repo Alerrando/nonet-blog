@@ -1,8 +1,11 @@
+import { useBlog } from "@/provider/BlogProvider";
+
 const Footer = () => {
+  const { zenMode } = useBlog();
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="border-t border-border dark:border-border/20 py-8 px-6 dark:bg-gray-900 dark:text-white">
+    <footer className={`border-t border-border dark:border-border/20 py-8 px-6 dark:bg-gray-900 dark:text-white`}>
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>

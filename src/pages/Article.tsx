@@ -19,7 +19,8 @@ import { useHistoryProvider } from "@/provider/HistoryArticleProvider";
 
 export function Article() {
   const { id } = useParams();
-  const { getArticleByName, getArticleById, setCurrentArticle, currentArticle, articles, createNewVersion } = useBlog();
+  const { getArticleByName, getArticleById, setCurrentArticle, currentArticle, articles, createNewVersion, zenMode } =
+    useBlog();
   const { toast } = useToast();
   const [edit, setEdit] = useState(false);
   const { exportArticle } = useImportExport();

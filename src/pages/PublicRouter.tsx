@@ -5,6 +5,7 @@ import dayjs from "dayjs";
 import localeData from "dayjs/plugin/localeData";
 import weekday from "dayjs/plugin/weekday";
 import { useEffect, useRef } from "react";
+import { useHotkeys } from "react-hotkeys-hook";
 import { CiExport } from "react-icons/ci";
 import { Outlet } from "react-router-dom";
 
@@ -20,11 +21,12 @@ dayjs.extend(weekday);
 dayjs.extend(localeData);
 
 export function PublicRouter() {
-  const { articles, currentArticle, setCurrentArticle } = useBlog();
+  const { articles, currentArticle, setCurrentArticle, zenMode, setZenMode } = useBlog();
   const { selectedHistory } = useHistoryProvider();
   const { importArticle } = useImportExport();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const queryClient = new QueryClient();
+  useHotkeys("z", () => setZenMode(!zenMode));
 
   useEffect(() => {
     if (articles.length === 0) queryClient.refetchQueries(["get-all-articles"]);
@@ -33,15 +35,17 @@ export function PublicRouter() {
 
   return (
     <>
-      <Header />
-      <main className="min-h-screen pt-24 px-6 dark:bg-gray-900 dark:text-white">
+      {!zenMode && <Header />}
+      <main className={`min-h-screen ${zenMode ? "py-6" : "pt-24"} px-6 dark:bg-gray-900 dark:text-white`}>
         <Outlet />
 
-        <AddArticle
-          icon={CiExport}
-          onClick={() => handleClickImport()}
-          className={`bg-violet-600 text-white ${!currentArticle?.id && "right-28"}`}
-        />
+        {!zenMode && (
+          <AddArticle
+            icon={CiExport}
+            onClick={() => handleClickImport()}
+            className={`bg-violet-600 text-white ${!currentArticle?.id && "right-28"}`}
+          />
+        )}
 
         <input
           type="file"
@@ -51,7 +55,8 @@ export function PublicRouter() {
           className="hidden"
         />
       </main>
-      <Footer />
+
+      {!zenMode && <Footer />}
     </>
   );
 
