@@ -1,12 +1,14 @@
 import dayjs from "dayjs";
-import { ArrowLeft, Calendar, Clock } from "lucide-react";
+import { ArrowLeft, Calendar, ChartLine, Clock } from "lucide-react";
 import { Suspense, useEffect, useState } from "react";
 import { CiEdit, CiExport } from "react-icons/ci";
 import { Link, useParams } from "react-router-dom";
 
+import { AnalyticsDrawer } from "@/components/AnalyticsDrawer";
 import { Editor } from "@/components/Editor/Editor";
 import { HistoryContent } from "@/components/HistoryContent/HistoryContent";
 import { Button } from "@/components/ui/button";
+import { Drawer, DrawerTrigger } from "@/components/ui/drawer";
 import { useToast } from "@/hooks/use-toast";
 import { useImportExport } from "@/hooks/useImportExport";
 import { useMutationPutArticle } from "@/hooks/useMutationPutArticle";
@@ -24,12 +26,40 @@ export function Article() {
   const { updateArticleAsync } = useMutationPutArticle();
   const { refetchGetAllArticles } = useQueryAllArticles();
   const { setSelectedHistory } = useHistoryProvider();
+  const timeReadNow = new Date();
 
   useEffect(() => {
     if (!id) return;
     const aux = getArticleById(id);
     setCurrentArticle(aux);
   }, [id, articles]);
+
+  useEffect(() => {
+    (async () => {
+      if (!currentArticle) return;
+      const aux = { ...currentArticle };
+      if (aux.statistics) {
+        aux.statistics.countViews += 1;
+      } else {
+        aux.statistics = { countViews: 1, timeRead: 0 };
+      }
+      await updateArticleAsync(aux);
+      refetchGetAllArticles();
+    })();
+  }, []);
+
+  useEffect(() => {
+    const handleBeforeUnload = async (e: BeforeUnloadEvent) => {
+      const timeDiff = dayjs(new Date()).diff(dayjs(timeReadNow), "second");
+      const aux = { ...currentArticle };
+      aux.statistics = { ...aux.statistics, timeRead: aux.statistics.timeRead + timeDiff };
+      await updateArticleAsync(aux);
+      e.preventDefault();
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => window.removeEventListener("beforeunload", handleBeforeUnload);
+  }, []);
 
   if (!currentArticle) {
     return (
@@ -75,6 +105,15 @@ export function Article() {
               >
                 <CiEdit size={24} />
               </div>
+
+              <Drawer>
+                <DrawerTrigger asChild>
+                  <div className="flex items-center justify-center hover:bg-zinc-700 hover:text-white transition-colors cursor-pointer rounded-md p-2">
+                    <ChartLine size={24} />
+                  </div>
+                </DrawerTrigger>
+                <AnalyticsDrawer />
+              </Drawer>
               <div
                 className="flex items-center justify-center p-2 hover:bg-zinc-700 hover:text-white transition-colors cursor-pointer rounded-md"
                 onClick={() => exportArticle(currentArticle)}

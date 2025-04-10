@@ -1,4 +1,5 @@
 import { HistoryArticleModel } from "./HistoryArticleModel";
+import { StatisticsModel } from "./StatisticsModel";
 
 export interface ArticleModel {
   id: string;
@@ -8,4 +9,5 @@ export interface ArticleModel {
   html: string;
   lastUpdate: Date;
   history?: HistoryArticleModel[];
+  statistics: StatisticsModel;
 }
