@@ -1,3 +1,4 @@
+
 import "dayjs/locale/pt-br";
 
 import { QueryClient } from "@tanstack/react-query";
@@ -25,18 +26,24 @@ export function PublicRouter() {
   const { selectedHistory } = useHistoryProvider();
   const { importArticle } = useImportExport();
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const queryClient = new QueryClient();
+  const localQueryClient = new QueryClient();
   useHotkeys("z", () => setZenMode(!zenMode));
 
   useEffect(() => {
-    if (articles.length === 0) queryClient.refetchQueries(["get-all-articles"]);
-    if (selectedHistory.length > 0) setCurrentArticle("");
+    if (articles.length === 0) localQueryClient.refetchQueries(["get-all-articles"]);
+    if (selectedHistory.length > 0) setCurrentArticle(null);
   }, []);
 
   return (
     <>
-      {!zenMode && <Header />}
-      <main className={`min-h-screen ${zenMode ? "py-6" : "pt-24"} px-6 dark:bg-gray-900 dark:text-white`}>
+      <Header />
+      <main 
+        className={`min-h-screen transition-all duration-300 ease-in-out dark:bg-gray-900 dark:text-white
+          ${zenMode 
+            ? "pt-6 zen-mode" 
+            : "pt-24"
+          } px-6`}
+      >
         <Outlet />
 
         {!zenMode && (
@@ -64,7 +71,7 @@ export function PublicRouter() {
     fileInputRef.current?.click();
   }
 
-  function handleFileChange(e: ChangeEvent<HTMLInputElement>) {
+  function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
     const files = e.target.files;
     if (files && files.length > 0) {
       importArticle(files[0])

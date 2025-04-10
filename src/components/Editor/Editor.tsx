@@ -1,3 +1,4 @@
+
 import "highlight.js/styles/panda-syntax-dark.css";
 import "./Editor.css";
 
@@ -43,7 +44,7 @@ type EditorProps = {
 
 export function Editor({ isNewContent, saveAnnotation, edit, setEdit }: EditorProps) {
   const { toast } = useToast();
-  const { currentArticle } = useBlog();
+  const { currentArticle, zenMode } = useBlog();
   const { selectedHistory } = useHistoryProvider();
   const { isLoading, startLoading, stopLoading } = useLoading();
   const [isSaving, setIsSaving] = useState(false);
@@ -116,10 +117,10 @@ export function Editor({ isNewContent, saveAnnotation, edit, setEdit }: EditorPr
 
   return (
     <>
-      <div className="flex flex-col gap-2 sm:gap-4 relative">
+      <div className={`flex flex-col gap-2 sm:gap-4 relative ${zenMode ? "zen-editor" : ""}`}>
         {edit ? (
           <>
-            <div className="flex flex-wrap gap-2 sm:gap-4 p-2 bg-zinc-800 rounded-lg sticky top-16 sm:top-24 z-20">
+            <div className={`flex flex-wrap gap-2 sm:gap-4 p-2 bg-zinc-800 rounded-lg sticky top-16 sm:top-24 z-20 ${zenMode ? "opacity-80 hover:opacity-100 transition-opacity" : ""}`}>
               <div className="flex flex-wrap gap-1 sm:gap-2 w-full sm:w-auto">
                 <ColorPicker editor={editor} />
                 <div className="flex gap-1 sm:gap-2">
@@ -174,11 +175,11 @@ export function Editor({ isNewContent, saveAnnotation, edit, setEdit }: EditorPr
                     : ""
                 }`,
                 `px-2 sm:px-4 ${isNewContent && "md:max-w-[92%] m-[0_auto!important]"}`,
-                `md:mr-[15%] lg:mr-[25%]`,
+                `${zenMode ? "md:mr-0" : "md:mr-[15%] lg:mr-[25%]"}`,
               )}
             />
 
-            <div className="w-full h-auto flex flex-col sm:flex-row items-center justify-end gap-2 sm:gap-4 px-2 sm:px-0">
+            <div className={`w-full h-auto flex flex-col sm:flex-row items-center justify-end gap-2 sm:gap-4 px-2 sm:px-0 ${zenMode ? "opacity-80 hover:opacity-100 transition-opacity" : ""}`}>
               <button
                 className="w-full sm:w-auto px-4 sm:px-6 md:px-8 py-1 md:py-2 border border-zinc-600 rounded-lg hover:bg-zinc-600 text-zinc-600 dark:border-zinc-400 dark:hover:bg-zinc-400 dark:hover:text-white dark:text-gray-400 hover:text-white text-sm sm:text-base"
                 onClick={() => setEdit(false)}
@@ -196,7 +197,10 @@ export function Editor({ isNewContent, saveAnnotation, edit, setEdit }: EditorPr
             {editor && <MenuBubbleEditor editor={editor} />}
           </>
         ) : (
-          <div className="px-2 sm:px-4 md:px-0" dangerouslySetInnerHTML={{ __html: editor?.getHTML() }} />
+          <div 
+            className={`px-2 sm:px-4 md:px-0 ${zenMode ? "zen-content text-lg leading-relaxed" : ""}`} 
+            dangerouslySetInnerHTML={{ __html: editor?.getHTML() }} 
+          />
         )}
       </div>
 

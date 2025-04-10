@@ -1,3 +1,4 @@
+
 :first-child {
   margin-top: 0;
 }
@@ -65,4 +66,68 @@ ol {
 img {
   border-radius: 8px;
   width: 65%;
+}
+
+/* Zen mode specific editor styles */
+.zen-mode .editor p,
+.zen-article .editor p {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  margin-bottom: 1.5em;
+  color: inherit;
+}
+
+.zen-mode .editor h1,
+.zen-article .editor h1 {
+  font-size: 2.5rem;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+.zen-mode .editor h2,
+.zen-article .editor h2 {
+  font-size: 2rem;
+  margin-top: 1.8rem;
+  margin-bottom: 0.9rem;
+}
+
+.zen-mode .editor h3,
+.zen-article .editor h3 {
+  font-size: 1.7rem;
+  margin-top: 1.6rem;
+  margin-bottom: 0.8rem;
+}
+
+.zen-mode .editor img,
+.zen-article .editor img {
+  display: block;
+  margin: 2rem auto;
+  max-width: 100%;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+}
+
+.zen-mode .editor blockquote,
+.zen-article .editor blockquote {
+  border-left: 4px solid rgba(125, 125, 125, 0.3);
+  padding-left: 1.5rem;
+  font-style: italic;
+  margin: 1.5rem 0;
+}
+
+.dark .zen-mode .editor blockquote,
+.dark .zen-article .editor blockquote {
+  border-left-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Reading time indicator for zen mode */
+.zen-mode .reading-progress,
+.zen-article .reading-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(to right, #9b87f5, #7E69AB);
+  z-index: 100;
+  transition: width 0.2s ease;
 }

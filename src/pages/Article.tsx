@@ -1,3 +1,4 @@
+
 import dayjs from "dayjs";
 import { ArrowLeft, Calendar, ChartLine, Clock } from "lucide-react";
 import { Suspense, useEffect, useState } from "react";
@@ -72,8 +73,8 @@ export function Article() {
   }
 
   return (
-    <div className="max-w-4xl mx-auto pb-8">
-      <div className="mb-6">
+    <div className={`max-w-4xl mx-auto pb-8 transition-all duration-300 ${zenMode ? "zen-article" : ""}`}>
+      <div className={`mb-6 transition-opacity duration-300 ${zenMode ? "opacity-0 h-0 overflow-hidden" : "opacity-100"}`}>
         <Link to="/">
           <Button variant="ghost" className="pl-0 hover:bg-transparent dark:text-white/80 dark:hover:text-white">
             <ArrowLeft className="mr-2 h-4 w-4" />
@@ -82,18 +83,20 @@ export function Article() {
         </Link>
       </div>
 
-      <div className="w-full h-[300px] md:h-[400px] rounded-lg overflow-hidden mb-8">
+      <div className={`w-full ${zenMode ? "h-[200px] mb-4" : "h-[300px] md:h-[400px] mb-8"} rounded-lg overflow-hidden transition-all duration-300`}>
         <img src={currentArticle.image} alt={currentArticle.title} className="w-full h-full object-cover" />
       </div>
 
-      <div className="mb-8">
+      <div className={`mb-8 transition-all duration-300 ${zenMode ? "text-center" : ""}`}>
         <div className="w-full flex items-start justify-between relative">
-          <div className="flex flex-col gap-2 mb-4">
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-medium relative">{currentArticle.title}</h1>
-            <span className="text-sm md:text-base">{currentArticle.summary}</span>
+          <div className={`flex flex-col gap-2 mb-4 ${zenMode ? "w-full" : ""}`}>
+            <h1 className={`transition-all duration-300 ${zenMode ? "text-4xl md:text-5xl lg:text-6xl" : "text-3xl md:text-4xl lg:text-5xl"} font-medium relative`}>
+              {currentArticle.title}
+            </h1>
+            <span className={`text-sm md:text-base ${zenMode ? "opacity-70" : ""}`}>{currentArticle.summary}</span>
           </div>
 
-          {!edit && (
+          {!edit && !zenMode && (
             <div className="flex items-center gap-4 absolute right-0">
               <div
                 className="flex items-center justify-center hover:bg-zinc-700 hover:text-white transition-colors cursor-pointer rounded-md p-2"
@@ -119,13 +122,13 @@ export function Article() {
             </div>
           )}
         </div>
-        <div className="flex items-center text-muted-foreground">
+        <div className={`flex items-center text-muted-foreground ${zenMode ? "justify-center" : ""}`}>
           <div className="flex items-center mr-4">
-            <Calendar className="h-4 w-4 mr-1" />
+            <Calendar className={`h-4 w-4 mr-1 ${zenMode ? "opacity-70" : ""}`} />
             <span className="text-sm">{dayjs(currentArticle?.lastUpdate).format("DD/MM/YYYY")}</span>
           </div>
           <div className="flex items-center">
-            <Clock className="h-4 w-4 mr-1" />
+            <Clock className={`h-4 w-4 mr-1 ${zenMode ? "opacity-70" : ""}`} />
             <span className="text-sm">
               Lido a {formatDuration(dayjs(new Date()).diff(dayjs(currentArticle?.statistics?.lastAccess), "second"))}
             </span>
@@ -145,7 +148,7 @@ export function Article() {
         </Suspense>
       )}
 
-      <HistoryContent />
+      {!zenMode && <HistoryContent />}
     </div>
   );
 

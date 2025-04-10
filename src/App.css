@@ -1,3 +1,4 @@
+
 #root {
   max-width: 1280px;
   margin: 0 auto;
@@ -40,3 +41,99 @@
 .read-the-docs {
   color: #888;
 }
+
+/* Zen Mode Styles */
+.zen-mode {
+  max-width: 70ch;
+  margin: 0 auto;
+  font-size: 1.1em;
+  line-height: 1.8;
+}
+
+.zen-mode p {
+  margin-bottom: 1.5em;
+}
+
+.zen-article {
+  max-width: 70ch;
+  margin: 2rem auto;
+  font-size: 1.1em;
+  line-height: 1.8;
+}
+
+.zen-article img {
+  display: block;
+  margin: 2rem auto;
+  max-width: 100%;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.zen-article h1,
+.zen-article h2,
+.zen-article h3 {
+  margin-top: 1.5em;
+  margin-bottom: 0.75em;
+  font-weight: 500;
+}
+
+.zen-article h1 {
+  font-size: 2.5rem;
+}
+
+.zen-article h2 {
+  font-size: 1.8rem;
+}
+
+.zen-article h3 {
+  font-size: 1.4rem;
+}
+
+.zen-article p {
+  margin-bottom: 1.5em;
+}
+
+/* Dark mode specific zen styles */
+.dark .zen-article {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.dark .zen-mode {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* Light mode specific zen styles */
+.light .zen-article {
+  color: rgba(0, 0, 0, 0.85);
+}
+
+.light .zen-mode {
+  color: rgba(0, 0, 0, 0.85);
+}
+
+/* Zen mode transitions */
+.zen-mode-enter,
+.zen-mode-exit {
+  transition: all 0.3s ease;
+}
+
+.zen-mode-enter {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.zen-mode-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.zen-mode-exit {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.zen-mode-exit-active {
+  opacity: 0;
+  transform: translateY(-10px);
+}
+
