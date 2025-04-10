@@ -40,7 +40,7 @@ const Header = () => {
                 </Button>
               </TooltipTrigger>
               <TooltipContent className="dark:bg-gray-800 dark:border-gray-700 dark:text-white">
-                <p>{isMobile ? "Ativar modo Zen" : "Clique aqui para ativar o modo Zen ou aperte "Z""}</p>
+                <p>{isMobile ? "Ativar modo Zen" : "Clique aqui para ativar o modo Zen ou aperte Z"}</p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
