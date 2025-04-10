@@ -1,4 +1,3 @@
-
 import dayjs from "dayjs";
 import { ArrowLeft, Calendar, ChartLine, Clock } from "lucide-react";
 import { Suspense, useEffect, useState } from "react";
@@ -10,11 +9,11 @@ import { Editor } from "@/components/Editor/Editor";
 import { HistoryContent } from "@/components/HistoryContent/HistoryContent";
 import { Button } from "@/components/ui/button";
 import { Drawer, DrawerTrigger } from "@/components/ui/drawer";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { useToast } from "@/hooks/use-toast";
 import { useImportExport } from "@/hooks/useImportExport";
 import { useMutationPutArticle } from "@/hooks/useMutationPutArticle";
 import { useQueryAllArticles } from "@/hooks/useQueryAllArticles";
-import { useIsMobile } from "@/hooks/use-mobile";
 import { ArticleModel } from "@/models/ArticleModel";
 import { useBlog } from "@/provider/BlogProvider";
 import { useHistoryProvider } from "@/provider/HistoryArticleProvider";
@@ -153,12 +152,13 @@ export function Article() {
         >
           <div className={`flex items-center ${isMobile ? "" : "mr-4"}`}>
             <Calendar className={`h-4 w-4 mr-1 ${zenMode ? "opacity-70" : ""}`} />
-            <span className="text-sm">{dayjs(currentArticle?.lastUpdate).format("DD/MM/YYYY")}</span>
+            <span className="text-sm">{dayjs(currentArticle?.lastUpdate).format("DD/MM/YYYY") || "-"}</span>
           </div>
           <div className="flex items-center">
             <Clock className={`h-4 w-4 mr-1 ${zenMode ? "opacity-70" : ""}`} />
             <span className="text-sm">
-              Lido a {formatDuration(dayjs(new Date()).diff(dayjs(currentArticle?.statistics?.lastAccess), "second"))}
+              Lido a{" "}
+              {formatDuration(dayjs(new Date()).diff(dayjs(currentArticle?.statistics?.lastAccess), "second")) || "-"}
             </span>
           </div>
         </div>

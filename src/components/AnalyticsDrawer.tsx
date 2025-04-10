@@ -53,14 +53,14 @@ export function AnalyticsDrawer({ formatDuration }: AnalyticsDrawerProps) {
         <StatCard
           icon={<CiEdit size={20} className="text-zinc-400" />}
           label="Edições"
-          value={`${currentArticle.history?.length || 0}`}
+          value={`${currentArticle?.history?.length || 0}`}
         />
 
         {/* Palavras */}
         <StatCard
           icon={<span className="text-zinc-400 text-lg font-bold">🔠</span>}
           label="Palavras"
-          value={`${currentArticle.html?.split(/\s+/).length || 0}`}
+          value={`${currentArticle?.html?.split(/\s+/).length || 0}`}
         />
 
         {/* Tempo de leitura - AGORA ATUALIZÁVEL */}

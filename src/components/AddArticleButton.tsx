@@ -12,7 +12,7 @@ export function AddArticle({ onClick, icon: Icon, ...rest }: AddArticleButtonPro
       {...rest}
       onClick={onClick}
       className={twMerge(
-        "fixed bottom-8 right-8 z-40 bg-primary text-primary-foreground rounded-full p-4 shadow-lg btn-hover",
+        "fixed bottom-8 right-8 z-40 bg-primary text-white flex items-center justify-center rounded-full md:p-4 shadow-lg btn-hover",
         rest.className,
       )}
       aria-label="Add new article"

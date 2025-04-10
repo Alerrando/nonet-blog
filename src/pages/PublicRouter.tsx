@@ -1,4 +1,3 @@
-
 import "dayjs/locale/pt-br";
 
 import { QueryClient } from "@tanstack/react-query";
@@ -8,13 +7,14 @@ import weekday from "dayjs/plugin/weekday";
 import { useEffect, useRef } from "react";
 import { useHotkeys } from "react-hotkeys-hook";
 import { CiExport } from "react-icons/ci";
+import { FaYinYang } from "react-icons/fa";
 import { Outlet } from "react-router-dom";
 
 import { AddArticle } from "@/components/AddArticleButton";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
-import { useImportExport } from "@/hooks/useImportExport";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { useImportExport } from "@/hooks/useImportExport";
 import { useBlog } from "@/provider/BlogProvider";
 import { useHistoryProvider } from "@/provider/HistoryArticleProvider";
 
@@ -45,13 +45,19 @@ export function PublicRouter() {
       >
         <Outlet />
 
-        {!zenMode && (
+        {!zenMode ? (
           <AddArticle
             icon={CiExport}
             onClick={() => handleClickImport()}
             className={`bg-violet-600 text-white ${!currentArticle?.id && "right-20 sm:right-28"} ${
               isMobile ? "h-10 w-10" : ""
             }`}
+          />
+        ) : (
+          <AddArticle
+            icon={FaYinYang}
+            onClick={() => setZenMode(false)}
+            className={`bg-transparent text-white left-4 h-10 w-10`}
           />
         )}
 

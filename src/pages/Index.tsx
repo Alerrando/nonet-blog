@@ -1,4 +1,3 @@
-
 import { Plus } from "lucide-react";
 import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
@@ -37,7 +36,7 @@ const Index = () => {
         image: imageUrl,
         html: "",
         lastUpdate: new Date(),
-        statistics: { countViews: 0, timeRead: 0, lastAccess: new Date() }
+        statistics: { countViews: 0, timeRead: 0, lastAccess: new Date() },
       };
 
       await addArticleAsync(newArticle);
