@@ -26,6 +26,8 @@ export function AnalyticsDrawer({ formatDuration }: AnalyticsDrawerProps) {
     return () => clearInterval(interval);
   }, [startTime]);
 
+  if (!currentArticle || !currentArticle?.history) return null;
+
   return (
     <DrawerContent className="bg-zinc-900 border border-zinc-800 text-white">
       <DrawerHeader>
@@ -44,7 +46,7 @@ export function AnalyticsDrawer({ formatDuration }: AnalyticsDrawerProps) {
         <StatCard
           icon={<Calendar className="w-5 h-5 text-zinc-400" />}
           label="Última edição"
-          value={dayjs(currentArticle?.history[currentArticle?.history?.length - 1].createdAt || new Date()).format(
+          value={dayjs(currentArticle?.history[currentArticle?.history?.length - 1]?.createdAt || new Date()).format(
             "DD/MM/YYYY",
           )}
         />

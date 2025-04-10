@@ -34,9 +34,10 @@ export function Article() {
 
   useEffect(() => {
     if (!id) return;
-    let aux = getArticleById(id);
-    aux = fillArticleDefaults(aux);
-    setCurrentArticle(aux);
+    const aux = getArticleById(id);
+    const auxFill = fillArticleDefaults(aux);
+    if (aux !== auxFill) setCurrentArticle(auxFill);
+    else setCurrentArticle(aux);
   }, [id, articles]);
 
   useEffect(() => {
@@ -126,7 +127,7 @@ export function Article() {
                 <CiEdit size={isMobile ? 20 : 24} />
               </div>
 
-              {!zenMode && (
+              {!zenMode && currentArticle && (
                 <>
                   <Drawer>
                     <DrawerTrigger asChild>
