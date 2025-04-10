@@ -8,9 +8,13 @@ import { useBlog } from "@/provider/BlogProvider";
 import { StatCard } from "./StatCard";
 import { DrawerContent, DrawerHeader, DrawerTitle } from "./ui/drawer";
 
-export function AnalyticsDrawer() {
+interface AnalyticsDrawerProps {
+  formatDuration: (seconds: number) => string;
+}
+
+export function AnalyticsDrawer({ formatDuration }: AnalyticsDrawerProps) {
   const { currentArticle } = useBlog();
-  const [startTime] = useState(new Date()); // Armazena o momento em que o Drawer foi aberto
+  const [startTime] = useState(new Date());
   const [duration, setDuration] = useState(0);
 
   useEffect(() => {
@@ -25,7 +29,7 @@ export function AnalyticsDrawer() {
   return (
     <DrawerContent className="bg-zinc-900 border border-zinc-800 text-white">
       <DrawerHeader>
-        <DrawerTitle>Analytics</DrawerTitle>
+        <DrawerTitle className="text-2xl font-bold">Analytics</DrawerTitle>
       </DrawerHeader>
 
       <div className="px-4 pb-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
@@ -73,16 +77,4 @@ export function AnalyticsDrawer() {
       </div>
     </DrawerContent>
   );
-
-  function formatDuration(seconds: number): string {
-    const minutes = Math.floor(seconds / 60);
-    const remainingSeconds = seconds % 60;
-
-    const parts = [];
-
-    if (minutes > 0) parts.push(`${minutes} minuto${minutes > 1 ? "s" : ""}`);
-    if (remainingSeconds > 0) parts.push(`${remainingSeconds} segundo${remainingSeconds > 1 ? "s" : ""}`);
-
-    return parts.length > 0 ? parts.join(" e ") : "menos de 1 segundo";
-  }
 }

@@ -49,16 +49,8 @@ export function Article() {
   }, []);
 
   useEffect(() => {
-    const handleBeforeUnload = async (e: BeforeUnloadEvent) => {
-      const timeDiff = dayjs(new Date()).diff(dayjs(timeReadNow), "second");
-      const aux = { ...currentArticle };
-      aux.statistics = { ...aux.statistics, timeRead: aux.statistics.timeRead + timeDiff };
-      await updateArticleAsync(aux);
-      e.preventDefault();
-    };
-
-    window.addEventListener("beforeunload", handleBeforeUnload);
-    return () => window.removeEventListener("beforeunload", handleBeforeUnload);
+    window.addEventListener("beforeunload", handleSaveTime);
+    return () => window.removeEventListener("beforeunload", handleSaveTime);
   }, []);
 
   if (!currentArticle) {
@@ -78,6 +70,8 @@ export function Article() {
     );
   }
 
+  console.log(dayjs(currentArticle.statistics.lastAccess).format("DD/MM/YYYY HH:mm:ss"));
+
   return (
     <div className="max-w-4xl mx-auto pb-8">
       <div className="mb-6">
@@ -94,11 +88,14 @@ export function Article() {
       </div>
 
       <div className="mb-8">
-        <div className="w-full flex items-center justify-between">
-          <h1 className="text-3xl md:text-4xl lg:text-5xl font-medium mb-4 relative">{currentArticle.title}</h1>
+        <div className="w-full flex items-start justify-between relative">
+          <div className="flex flex-col gap-2 mb-4">
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-medium relative">{currentArticle.title}</h1>
+            <span className="text-sm md:text-base">{currentArticle.summary}</span>
+          </div>
 
           {!edit && (
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-4 absolute right-0">
               <div
                 className="flex items-center justify-center hover:bg-zinc-700 hover:text-white transition-colors cursor-pointer rounded-md p-2"
                 onClick={() => setEdit(true)}
@@ -112,7 +109,7 @@ export function Article() {
                     <ChartLine size={24} />
                   </div>
                 </DrawerTrigger>
-                <AnalyticsDrawer />
+                <AnalyticsDrawer formatDuration={formatDuration} />
               </Drawer>
               <div
                 className="flex items-center justify-center p-2 hover:bg-zinc-700 hover:text-white transition-colors cursor-pointer rounded-md"
@@ -130,7 +127,9 @@ export function Article() {
           </div>
           <div className="flex items-center">
             <Clock className="h-4 w-4 mr-1" />
-            <span className="text-sm">5 min read</span>
+            <span className="text-sm">
+              Lido a {formatDuration(dayjs(new Date()).diff(dayjs(currentArticle.statistics.lastAccess), "second"))}
+            </span>
           </div>
         </div>
       </div>
@@ -181,5 +180,35 @@ export function Article() {
         });
       }
     }
+  }
+
+  async function handleSaveTime(e?: BeforeUnloadEvent) {
+    const timeDiff = dayjs(new Date()).diff(dayjs(timeReadNow), "second");
+    const aux = { ...currentArticle };
+
+    if (e) {
+      e.preventDefault();
+      aux.statistics = { ...aux.statistics, timeRead: aux.statistics.timeRead + timeDiff, lastAccess: new Date() };
+    } else {
+      aux.statistics = { ...aux.statistics, timeRead: aux.statistics.timeRead + timeDiff };
+    }
+    await updateArticleAsync(aux);
+    refetchGetAllArticles();
+  }
+
+  function formatDuration(seconds: number): string {
+    const days = Math.floor(seconds / (3600 * 24));
+    const hours = Math.floor((seconds % (3600 * 24)) / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    const remainingSeconds = seconds % 60;
+
+    const parts = [];
+
+    if (days > 0) parts.push(`${days} dia${days > 1 ? "s" : ""}`);
+    if (hours > 0) parts.push(`${hours} hora${hours > 1 ? "s" : ""}`);
+    if (minutes > 0) parts.push(`${minutes} minuto${minutes > 1 ? "s" : ""}`);
+    if (remainingSeconds > 0) parts.push(`${remainingSeconds} segundo${remainingSeconds > 1 ? "s" : ""}`);
+
+    return parts.length > 0 ? parts.join(" e ") : "menos de 1 segundo";
   }
 }
