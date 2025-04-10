@@ -119,7 +119,7 @@
   }
   
   .zen-content p {
-    @apply my-6 text-[hsl(var(--zen-foreground))];
+    @apply my-4 text-[hsl(var(--zen-foreground))];
   }
   
   .zen-content h1, 

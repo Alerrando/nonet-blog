@@ -1,4 +1,3 @@
-
 import { FaYinYang } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
@@ -12,12 +11,9 @@ const Header = () => {
   const { setZenMode, zenMode } = useBlog();
 
   return (
-    <header 
+    <header
       className={`fixed top-0 w-full z-50 transition-all duration-300 ease-in-out 
-        ${zenMode 
-          ? "opacity-0 pointer-events-none" 
-          : "glass-header py-4 px-6 dark:bg-gray-900 dark:text-white"
-        }`}
+        ${zenMode ? "opacity-0 pointer-events-none" : "glass-header py-4 px-6 dark:bg-gray-900 dark:text-white"}`}
     >
       <div className="max-w-7xl mx-auto flex justify-between items-center">
         <div className="text-2xl font-heading font-medium text-foreground transition-opacity hover:opacity-80">

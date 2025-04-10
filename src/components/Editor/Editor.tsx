@@ -1,4 +1,3 @@
-
 import "highlight.js/styles/panda-syntax-dark.css";
 import "./Editor.css";
 
@@ -11,7 +10,7 @@ import js from "highlight.js/lib/languages/javascript";
 import html from "highlight.js/lib/languages/xml";
 import { all, createLowlight } from "lowlight";
 import { RefreshCw } from "lucide-react";
-import { FormEvent, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { GoListOrdered, GoListUnordered } from "react-icons/go";
 import { RxCode, RxFontBold, RxFontItalic, RxStrikethrough } from "react-icons/rx";
 import { twMerge } from "tailwind-merge";
@@ -120,7 +119,9 @@ export function Editor({ isNewContent, saveAnnotation, edit, setEdit }: EditorPr
       <div className={`flex flex-col gap-2 sm:gap-4 relative ${zenMode ? "zen-editor" : ""}`}>
         {edit ? (
           <>
-            <div className={`flex flex-wrap gap-2 sm:gap-4 p-2 bg-zinc-800 rounded-lg sticky top-16 sm:top-24 z-20 ${zenMode ? "opacity-80 hover:opacity-100 transition-opacity" : ""}`}>
+            <div
+              className={`flex flex-wrap gap-2 sm:gap-4 p-2 bg-zinc-800 rounded-lg sticky top-16 sm:top-24 z-20 ${zenMode ? "opacity-80 hover:opacity-100 transition-opacity" : ""}`}
+            >
               <div className="flex flex-wrap gap-1 sm:gap-2 w-full sm:w-auto">
                 <ColorPicker editor={editor} />
                 <div className="flex gap-1 sm:gap-2">
@@ -179,7 +180,9 @@ export function Editor({ isNewContent, saveAnnotation, edit, setEdit }: EditorPr
               )}
             />
 
-            <div className={`w-full h-auto flex flex-col sm:flex-row items-center justify-end gap-2 sm:gap-4 px-2 sm:px-0 ${zenMode ? "opacity-80 hover:opacity-100 transition-opacity" : ""}`}>
+            <div
+              className={`w-full h-auto flex flex-col sm:flex-row items-center justify-end gap-2 sm:gap-4 px-2 sm:px-0 ${zenMode ? "opacity-80 hover:opacity-100 transition-opacity" : ""}`}
+            >
               <button
                 className="w-full sm:w-auto px-4 sm:px-6 md:px-8 py-1 md:py-2 border border-zinc-600 rounded-lg hover:bg-zinc-600 text-zinc-600 dark:border-zinc-400 dark:hover:bg-zinc-400 dark:hover:text-white dark:text-gray-400 hover:text-white text-sm sm:text-base"
                 onClick={() => setEdit(false)}
@@ -197,9 +200,9 @@ export function Editor({ isNewContent, saveAnnotation, edit, setEdit }: EditorPr
             {editor && <MenuBubbleEditor editor={editor} />}
           </>
         ) : (
-          <div 
-            className={`px-2 sm:px-4 md:px-0 ${zenMode ? "zen-content text-lg leading-relaxed" : ""}`} 
-            dangerouslySetInnerHTML={{ __html: editor?.getHTML() }} 
+          <div
+            className={`px-2 sm:px-4 md:px-0 ${zenMode ? "zen-content text-lg leading-relaxed" : ""}`}
+            dangerouslySetInnerHTML={{ __html: editor?.getHTML() }}
           />
         )}
       </div>

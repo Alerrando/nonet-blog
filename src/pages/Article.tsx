@@ -1,4 +1,3 @@
-
 import dayjs from "dayjs";
 import { ArrowLeft, Calendar, ChartLine, Clock } from "lucide-react";
 import { Suspense, useEffect, useState } from "react";
@@ -74,7 +73,9 @@ export function Article() {
 
   return (
     <div className={`max-w-4xl mx-auto pb-8 transition-all duration-300 ${zenMode ? "zen-article" : ""}`}>
-      <div className={`mb-6 transition-opacity duration-300 ${zenMode ? "opacity-0 h-0 overflow-hidden" : "opacity-100"}`}>
+      <div
+        className={`mb-6 transition-opacity duration-300 ${zenMode ? "opacity-0 h-0 overflow-hidden" : "opacity-100"}`}
+      >
         <Link to="/">
           <Button variant="ghost" className="pl-0 hover:bg-transparent dark:text-white/80 dark:hover:text-white">
             <ArrowLeft className="mr-2 h-4 w-4" />
@@ -83,21 +84,25 @@ export function Article() {
         </Link>
       </div>
 
-      <div className={`w-full ${zenMode ? "h-[200px] mb-4" : "h-[300px] md:h-[400px] mb-8"} rounded-lg overflow-hidden transition-all duration-300`}>
+      <div
+        className={`w-full ${zenMode ? "h-[200px] mb-4" : "h-[300px] md:h-[400px] mb-8"} rounded-lg overflow-hidden transition-all duration-300`}
+      >
         <img src={currentArticle.image} alt={currentArticle.title} className="w-full h-full object-cover" />
       </div>
 
       <div className={`mb-8 transition-all duration-300 ${zenMode ? "text-center" : ""}`}>
         <div className="w-full flex items-start justify-between relative">
           <div className={`flex flex-col gap-2 mb-4 ${zenMode ? "w-full" : ""}`}>
-            <h1 className={`transition-all duration-300 ${zenMode ? "text-4xl md:text-5xl lg:text-6xl" : "text-3xl md:text-4xl lg:text-5xl"} font-medium relative`}>
+            <h1
+              className={`transition-all duration-300 ${zenMode ? "text-4xl md:text-5xl lg:text-6xl" : "text-3xl md:text-4xl lg:text-5xl"} font-medium relative`}
+            >
               {currentArticle.title}
             </h1>
             <span className={`text-sm md:text-base ${zenMode ? "opacity-70" : ""}`}>{currentArticle.summary}</span>
           </div>
 
-          {!edit && !zenMode && (
-            <div className="flex items-center gap-4 absolute right-0">
+          {!edit && (
+            <div className={`flex items-center gap-4 absolute right-0 ${zenMode && "top-4"}`}>
               <div
                 className="flex items-center justify-center hover:bg-zinc-700 hover:text-white transition-colors cursor-pointer rounded-md p-2"
                 onClick={() => setEdit(true)}
@@ -105,20 +110,24 @@ export function Article() {
                 <CiEdit size={24} />
               </div>
 
-              <Drawer>
-                <DrawerTrigger asChild>
-                  <div className="flex items-center justify-center hover:bg-zinc-700 hover:text-white transition-colors cursor-pointer rounded-md p-2">
-                    <ChartLine size={24} />
+              {!zenMode && (
+                <>
+                  <Drawer>
+                    <DrawerTrigger asChild>
+                      <div className="flex items-center justify-center hover:bg-zinc-700 hover:text-white transition-colors cursor-pointer rounded-md p-2">
+                        <ChartLine size={24} />
+                      </div>
+                    </DrawerTrigger>
+                    <AnalyticsDrawer formatDuration={formatDuration} />
+                  </Drawer>
+                  <div
+                    className="flex items-center justify-center p-2 hover:bg-zinc-700 hover:text-white transition-colors cursor-pointer rounded-md"
+                    onClick={() => exportArticle(currentArticle)}
+                  >
+                    <CiExport size={24} />
                   </div>
-                </DrawerTrigger>
-                <AnalyticsDrawer formatDuration={formatDuration} />
-              </Drawer>
-              <div
-                className="flex items-center justify-center p-2 hover:bg-zinc-700 hover:text-white transition-colors cursor-pointer rounded-md"
-                onClick={() => exportArticle(currentArticle)}
-              >
-                <CiExport size={24} />
-              </div>
+                </>
+              )}
             </div>
           )}
         </div>

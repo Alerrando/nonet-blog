@@ -1,4 +1,3 @@
-
 import "dayjs/locale/pt-br";
 
 import { QueryClient } from "@tanstack/react-query";
@@ -37,12 +36,9 @@ export function PublicRouter() {
   return (
     <>
       <Header />
-      <main 
+      <main
         className={`min-h-screen transition-all duration-300 ease-in-out dark:bg-gray-900 dark:text-white
-          ${zenMode 
-            ? "pt-6 zen-mode" 
-            : "pt-24"
-          } px-6`}
+          ${zenMode ? "pt-6 zen-mode" : "pt-24"} px-6`}
       >
         <Outlet />
 
