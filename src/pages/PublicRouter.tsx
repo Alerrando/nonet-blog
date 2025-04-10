@@ -57,7 +57,8 @@ export function PublicRouter() {
           <AddArticle
             icon={FaYinYang}
             onClick={() => setZenMode(false)}
-            className={`bg-transparent text-white left-4 h-10 w-10`}
+            className={`bg-transparent text-white left-4 h-10 w-10 md:p-2 border-transparent`}
+            classNameIcon="h-8 w-8"
           />
         )}
 

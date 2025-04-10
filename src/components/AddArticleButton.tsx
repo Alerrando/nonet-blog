@@ -3,10 +3,11 @@ import { twMerge } from "tailwind-merge";
 
 interface AddArticleButtonProps extends ButtonHTMLAttributes<HtmlHTMLAttributes> {
   onClick: () => void;
+  classNameIcon?: string;
   icon: HTMLElement;
 }
 
-export function AddArticle({ onClick, icon: Icon, ...rest }: AddArticleButtonProps) {
+export function AddArticle({ onClick, icon: Icon, classNameIcon, ...rest }: AddArticleButtonProps) {
   return (
     <button
       {...rest}
@@ -17,7 +18,7 @@ export function AddArticle({ onClick, icon: Icon, ...rest }: AddArticleButtonPro
       )}
       aria-label="Add new article"
     >
-      <Icon className="h-6 w-6" />
+      <Icon className={twMerge("h-6 w-6", classNameIcon)} />
     </button>
   );
 }
