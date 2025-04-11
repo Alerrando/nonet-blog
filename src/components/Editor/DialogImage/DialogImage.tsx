@@ -1,7 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Editor } from "@tiptap/react";
 import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { FaImage } from "react-icons/fa";
 
 import { Button } from "@/components/ui/button";
@@ -15,8 +15,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 
 import { FormDataImage, formSchemaImage } from "./Validation";
 
@@ -25,12 +23,8 @@ interface DialogImageProps {
 }
 
 export function DialogImage({ editor }: DialogImageProps) {
-  const { register, handleSubmit } = useForm<FormDataImage>({
+  const { register, handleSubmit, setValue, control } = useForm<FormDataImage>({
     resolver: zodResolver(formSchemaImage),
-    defaultValues: {
-      imageUpload: null,
-      imageUrl: "",
-    },
   });
   const [imageInputType, setImageInputType] = useState<"upload" | "url">("upload");
   const [preview, setPreview] = useState<string | null>(null);
@@ -41,6 +35,7 @@ export function DialogImage({ editor }: DialogImageProps) {
       const reader = new FileReader();
       reader.onloadend = () => {
         setPreview(reader.result as string);
+        setValue("image", reader.result as string);
       };
       reader.readAsDataURL(file);
     }
@@ -48,19 +43,11 @@ export function DialogImage({ editor }: DialogImageProps) {
 
   const handleUrlChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPreview(e.target.value);
+    setValue("image", e.target.value);
   };
 
   function submit(e: FormDataImage) {
-    if (e.imageUpload) {
-      const file = e.imageUpload[0];
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        editor.commands.setImage({ src: reader.result as string, alt: e.imageAlt });
-      };
-      reader.readAsDataURL(file);
-    } else {
-      editor.commands.setImage({ src: e.imageUrl, alt: e.imageAlt });
-    }
+    editor.commands.setImage({ src: (e.image as string) || "", alt: e.imageAlt });
   }
 
   return (
@@ -74,7 +61,7 @@ export function DialogImage({ editor }: DialogImageProps) {
       <DialogContent className="sm:max-w-[425px]">
         <form action="" onSubmit={handleSubmit(submit)}>
           <DialogHeader>
-            <DialogTitle>Adicionar Imagem</DialogTitle>
+            <DialogTitle className="dark:text-white">Adicionar Imagem</DialogTitle>
             <DialogDescription>
               Adicione uma imagem para o seu artigo. Clique em Salvar quando terminar.
             </DialogDescription>
@@ -112,18 +99,17 @@ export function DialogImage({ editor }: DialogImageProps) {
             {imageInputType === "upload" ? (
               <div className="flex items-center">
                 <label
-                  htmlFor="imageUpload"
+                  htmlFor="image-upload"
                   className="cursor-pointer px-4 py-2.5 rounded-lg border border-input bg-background flex items-center dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300"
-                  onChange={handleImageChange}
                 >
                   <FaImage className="h-4 w-4 mr-2" />
                   <span>Escolher Arquivo</span>
                   <input
-                    {...register("imageUpload")}
-                    id="imageUpload"
+                    id="image-upload"
                     type="file"
                     accept="image/*"
                     className="hidden"
+                    onChange={handleImageChange}
                   />
                 </label>
                 {preview && (
@@ -134,32 +120,36 @@ export function DialogImage({ editor }: DialogImageProps) {
               </div>
             ) : (
               <div>
-                <Label htmlFor="imageUrl">URL da Imagem</Label>
-                <Input
-                  {...register("imageUrl")}
-                  id="imageUrl"
-                  type="url"
-                  className="w-full"
-                  onChange={handleUrlChange}
-                  required
+                <Controller
+                  control={control}
+                  name="imageUrl"
+                  render={({ field }) => (
+                    <input
+                      type="url"
+                      {...field}
+                      onChange={(e) => handleUrlChange(e)}
+                      className="w-full px-4 py-2.5 rounded-lg border border-input bg-background dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400"
+                      placeholder="Enter image URL"
+                    />
+                  )}
                 />
-                {preview && (
-                  <div className="mt-2 w-full h-40">
-                    <img src={preview} alt="Imagem Previa" className="w-full h-full object-cover rounded-md" />
-                  </div>
-                )}
+                <p className="text-xs text-muted-foreground mt-1 dark:text-gray-400">
+                  Example: https://example.com/image.jpg
+                </p>
               </div>
             )}
           </div>
 
           <DialogFooter>
             <DialogClose asChild>
-              <Button type="button" variant="outline">
+              <Button type="button" variant="outline" className="dark:text-white">
                 Fechar
               </Button>
             </DialogClose>
 
-            <Button type="submit">Salvar</Button>
+            <Button type="submit" className="dark:text-white">
+              Salvar
+            </Button>
           </DialogFooter>
         </form>
       </DialogContent>
