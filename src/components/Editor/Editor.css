@@ -68,6 +68,10 @@ img {
   width: 65%;
 }
 
+a {
+  color: #578FCA;
+}
+
 /* Zen mode specific editor styles */
 .zen-mode .editor p,
 .zen-article .editor p {
