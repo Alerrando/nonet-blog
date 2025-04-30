@@ -1,6 +1,7 @@
 import "highlight.js/styles/panda-syntax-dark.css";
 import "./Editor.css";
 
+import CodeBlock from "@tiptap/extension-code-block";
 import { Color } from "@tiptap/extension-color";
 import Image from "@tiptap/extension-image";
 import { Link } from "@tiptap/extension-link";
@@ -62,6 +63,7 @@ export function Editor({ isNewContent, saveAnnotation, edit, setEdit }: EditorPr
       TextStyle,
       Image,
       FontSize,
+      CodeBlock,
       Link.configure({
         openOnClick: false,
         autolink: true,
@@ -202,7 +204,7 @@ export function Editor({ isNewContent, saveAnnotation, edit, setEdit }: EditorPr
                 <FormatButton editor={editor} icon={<RxFontBold />} fontEditorName="toggleBold" font="bold" />
                 <FormatButton editor={editor} icon={<RxFontItalic />} fontEditorName="toggleItalic" font="italic" />
                 <FormatButton editor={editor} icon={<RxStrikethrough />} fontEditorName="toggleStrike" font="strike" />
-                <FormatButton editor={editor} icon={<RxCode />} fontEditorName="toggleCode" font="code" />
+                <FormatButton editor={editor} icon={<RxCode />} fontEditorName="toggleCodeBlock" font="codeBlock" />
                 <DialogImage editor={editor} />
                 <LinkButtonEditor editor={editor} />
               </div>
