@@ -1,14 +1,16 @@
 import "highlight.js/styles/panda-syntax-dark.css";
 import "./Editor.css";
 
-import CodeBlock from "@tiptap/extension-code-block";
+import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
 import { Color } from "@tiptap/extension-color";
 import Image from "@tiptap/extension-image";
 import { Link } from "@tiptap/extension-link";
 import TextStyle from "@tiptap/extension-text-style";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
+import css from "highlight.js/lib/languages/css";
 import js from "highlight.js/lib/languages/javascript";
+import ts from "highlight.js/lib/languages/typescript";
 import html from "highlight.js/lib/languages/xml";
 import { all, createLowlight } from "lowlight";
 import { RefreshCw } from "lucide-react";
@@ -36,7 +38,9 @@ import { MenuBubbleEditor } from "./MenuBubbleEditor/MenuBubbleEditor";
 const lowlight = createLowlight(all);
 
 lowlight.register("html", html);
+lowlight.register("css", css);
 lowlight.register("js", js);
+lowlight.register("ts", ts);
 
 type EditorProps = {
   isNewContent: boolean;
@@ -63,7 +67,9 @@ export function Editor({ isNewContent, saveAnnotation, edit, setEdit }: EditorPr
       TextStyle,
       Image,
       FontSize,
-      CodeBlock,
+      CodeBlockLowlight.configure({
+        lowlight,
+      }),
       Link.configure({
         openOnClick: false,
         autolink: true,
@@ -222,7 +228,6 @@ export function Editor({ isNewContent, saveAnnotation, edit, setEdit }: EditorPr
                   fontEditorName="toggleOrderedList"
                   font="orderedList"
                 />
-                <FormatButton editor={editor} icon={<RxCode />} fontEditorName="toggleCodeBlock" font="codeBlock" />
               </div>
 
               <div className="ml-auto flex items-center justify-center w-full sm:w-auto mt-1 sm:mt-0">

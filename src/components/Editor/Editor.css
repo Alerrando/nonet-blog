@@ -72,6 +72,14 @@ a {
   color: #578FCA;
 }
 
+pre {
+  background-color: #2d2d2d;
+  border-radius: .5rem;
+  color: #fff;
+  padding: .75rem 1rem;
+  margin: 1.5rem 0;
+}
+
 /* Zen mode specific editor styles */
 .zen-mode .editor p,
 .zen-article .editor p {
